@@ -1,5 +1,5 @@
-"""LLM agent wrappers. Falls back to deterministic mock output when no
-ANTHROPIC_API_KEY is set (or MOCK_AGENTS=1), so the full game runs offline."""
+"""LLM agent wrappers. Provider auto-detects (OpenAI > Anthropic > mock); set
+MOCK_AGENTS=1 or leave keys unset to run deterministic offline mock agents."""
 from __future__ import annotations
 
 import os
@@ -9,7 +9,6 @@ import random
 from . import prompts
 
 # Provider auto-detect: OpenAI if its key is present, else Anthropic, else mock.
-# Force mock with MOCK_AGENTS=1. Override the model with AGENT_MODEL.
 _FORCE_MOCK = os.environ.get("MOCK_AGENTS") == "1"
 _OPENAI_KEY = os.environ.get("OPENAI_API_KEY")
 _ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY")
@@ -30,7 +29,7 @@ if PROVIDER == "openai":
         from openai import OpenAI
 
         _client = OpenAI(api_key=_OPENAI_KEY)
-    except Exception as e:  # pragma: no cover - import/credential issues
+    except Exception as e:  # pragma: no cover
         print(f"[agents] OpenAI init failed, falling back to mock: {e}")
         PROVIDER = "mock"
 elif PROVIDER == "anthropic":
@@ -38,7 +37,7 @@ elif PROVIDER == "anthropic":
         from anthropic import Anthropic
 
         _client = Anthropic(api_key=_ANTHROPIC_KEY)
-    except Exception as e:  # pragma: no cover - import/credential issues
+    except Exception as e:  # pragma: no cover
         print(f"[agents] Anthropic init failed, falling back to mock: {e}")
         PROVIDER = "mock"
 
@@ -49,103 +48,139 @@ def using_mock() -> bool:
     return _USE_MOCK
 
 
-# ----------------------------------------------------------------- real LLM ---
-
 def call_llm(prompt: str, max_tokens: int = 200) -> str:
     if PROVIDER == "openai":
         resp = _client.chat.completions.create(
-            model=MODEL,
-            max_tokens=max_tokens,
+            model=MODEL, max_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}],
         )
         return resp.choices[0].message.content or ""
-    # anthropic
     resp = _client.messages.create(
-        model=MODEL,
-        max_tokens=max_tokens,
+        model=MODEL, max_tokens=max_tokens,
         messages=[{"role": "user", "content": prompt}],
     )
     return resp.content[0].text
+
+
+# ------------------------------------------------------------------ parsing ---
+
+def _extract(text: str, names) -> str | None:
+    for n in names:
+        if re.search(rf"\b{re.escape(n)}\b", text, re.IGNORECASE):
+            return n
+    return None
+
+
+def _extract_vote(text: str, names) -> str | None:
+    m = re.search(r"VOTE:\s*([A-Za-z]+)", text, re.IGNORECASE)
+    if m and any(m.group(1).lower() == n.lower() for n in names):
+        return m.group(1)
+    return _extract(text, names)
+
+
+def _split_speech(raw: str):
+    """Pull SPEECH:/THOUGHT: out of a wolf/seer reply. Falls back to whole text."""
+    speech = thought = None
+    m = re.search(r"SPEECH:\s*(.+?)(?:\n\s*THOUGHT:|$)", raw, re.IGNORECASE | re.DOTALL)
+    t = re.search(r"THOUGHT:\s*(.+)$", raw, re.IGNORECASE | re.DOTALL)
+    if m:
+        speech = m.group(1).strip()
+    if t:
+        thought = t.group(1).strip()
+    if not speech:
+        speech = raw.strip()
+    return speech, thought
 
 
 # -------------------------------------------------------------- mock speech ---
 
 _MOCK_LINES = {
     "wolf": [
-        "I hear everyone pointing fingers, but where's the actual evidence? Let's slow down.",
+        "I hear fingers pointing, but where's the actual evidence? Let's not rush, {sus}.",
         "Honestly {sus} has been awfully quiet — quiet people are usually hiding something.",
-        "I'm just a villager like the rest of you. Pinning this on me wastes a day.",
+        "I'm a villager same as you. Burning a day on me just helps the real wolves.",
     ],
     "seer": [
         "I've been watching the patterns, and {sus}'s story doesn't add up for me.",
-        "Trust me when I say we should look hard at {sus} before we lose another night.",
+        "Trust me — we should look hard at {sus} before we lose another night.",
         "I have a strong read here. {sus} is the one I'd watch.",
     ],
     "villager": [
         "Something about {sus}'s answers feels rehearsed. I'm suspicious.",
-        "I want to hear {sus} explain that last vote — it didn't make sense.",
+        "I want {sus} to explain that last point — it didn't sit right.",
         "We can't keep stalling. My gut says {sus} is a wolf.",
     ],
 }
 
 
-def _mock_speak(player, state) -> str:
+def _mock_speak(player, state):
     others = [p.name for p in state.alive_players() if p.idx != player.idx]
     sus = random.choice(others) if others else "someone"
-    line = random.choice(_MOCK_LINES.get(player.role, _MOCK_LINES["villager"]))
-    return line.format(sus=sus)
+    line = random.choice(_MOCK_LINES.get(player.role, _MOCK_LINES["villager"])).format(sus=sus)
+    thought = None
+    if player.role == "wolf":
+        thought = f"Keep the heat on {sus}; protect my partner and stay unremarkable."
+    elif player.role == "seer":
+        thought = "Hold my read for now — revealing too early gets me killed tonight."
+    return line, thought
 
 
 # ------------------------------------------------------------------- public ---
 
-def agent_speak(player, state) -> str:
+def night_wolf_pick(state):
+    """-> (victim Player | None, reasoning str)."""
+    targets = [p for p in state.alive_players() if p.role != "wolf"]
+    if not targets:
+        return None, ""
+    if _USE_MOCK:
+        seer = next((p for p in targets if p.role == "seer"), None)
+        victim = seer or random.choice(targets)
+        return victim, f"Take out {victim.name} — neutralize the biggest threat to us."
+    actor = next((w for w in state.alive_wolves()), None)
+    raw = call_llm(prompts.wolf_night(actor, targets), max_tokens=60)
+    name = _extract(raw, [t.name for t in targets])
+    victim = state.by_name(name) or random.choice(targets)
+    return victim, raw.strip()
+
+
+def night_seer_pick(state):
+    """-> (seer Player | None, target Player | None)."""
+    seer = next((p for p in state.alive_players() if p.role == "seer"), None)
+    if not seer:
+        return None, None
+    targets = [p for p in state.alive_players() if p.idx != seer.idx]
+    if not targets:
+        return seer, None
+    if _USE_MOCK:
+        return seer, random.choice(targets)
+    raw = call_llm(prompts.seer_night(seer, targets), max_tokens=40)
+    name = _extract(raw, [t.name for t in targets])
+    return seer, (state.by_name(name) or random.choice(targets))
+
+
+def speak(player, state, seer_knowledge=None):
+    """-> (speech str, thought str | None). Thought feeds the god-mode panel."""
     if _USE_MOCK:
         return _mock_speak(player, state)
-    return call_llm(prompts.day_prompt(player, state)).strip()
+    raw = call_llm(prompts.day_speak(player, state, seer_knowledge), max_tokens=220)
+    if player.role in ("wolf", "seer"):
+        return _split_speech(raw)
+    return raw.strip(), None
 
 
-def _parse_choice(text: str, keyword: str, candidates, fallback_pool):
-    m = re.search(rf"{keyword}:\s*([A-Za-z]+)", text, re.IGNORECASE)
-    if m:
-        name = m.group(1)
-        target = next((p for p in candidates if p.name.lower() == name.lower()), None)
-        if target:
-            return target
-    return random.choice(fallback_pool) if fallback_pool else None
-
-
-def agent_vote(player, state):
-    others = [p for p in state.alive_players() if p.idx != player.idx]
+def vote(player, state, seer_knowledge=None):
+    """-> (target Player, reasoning str)."""
+    cands = [p for p in state.alive_players() if p.idx != player.idx]
     if _USE_MOCK:
-        # Villagers/seer lean toward an actual wolf; wolves deflect onto village.
         if player.role == "wolf":
-            pool = [p for p in others if p.role != "wolf"] or others
+            pool = [p for p in cands if p.role != "wolf"] or cands
         else:
-            pool = [p for p in others if p.role == "wolf"] or others
-        target = random.choice(pool)
-        return target, f"VOTE: {target.name}"
-    text = call_llm(prompts.vote_prompt(player, state), max_tokens=120)
-    target = _parse_choice(text, "VOTE", others, others)
-    return target, text
-
-
-def wolf_pick_victim(wolf, state):
-    village = state.alive_village()
-    if _USE_MOCK:
-        # Prefer the seer if alive, else random villager.
-        seer = next((p for p in village if p.role == "seer"), None)
-        target = seer or (random.choice(village) if village else None)
-        return target, f"KILL: {target.name if target else ''}"
-    text = call_llm(prompts.night_wolf_prompt(wolf, state), max_tokens=120)
-    target = _parse_choice(text, "KILL", village, village)
-    return target, text
-
-
-def seer_inspect(seer, state):
-    others = [p for p in state.alive_players() if p.idx != seer.idx]
-    if _USE_MOCK:
-        target = random.choice(others) if others else None
-        return target, f"INSPECT: {target.name if target else ''}"
-    text = call_llm(prompts.seer_prompt(seer, state), max_tokens=120)
-    target = _parse_choice(text, "INSPECT", others, others)
-    return target, text
+            pool = [p for p in cands if p.role == "wolf"] or cands
+        t = random.choice(pool)
+        return t, f"VOTE: {t.name}"
+    raw = call_llm(prompts.vote(player, state, seer_knowledge), max_tokens=90)
+    name = _extract_vote(raw, [c.name for c in cands])
+    target = state.by_name(name)
+    if not target or target.idx == player.idx:
+        target = random.choice(cands)
+    return target, raw.strip()

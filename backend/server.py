@@ -1,17 +1,16 @@
-"""FastAPI server. Serves the live GameState to the frontend with server-side
-fog-of-war (never sends hidden roles or private reasoning to a bettor-mode client).
+"""FastAPI server. Serves the live game to the frontend in the 02-INTERFACES
+shape, with server-side fog-of-war: a bettor-mode client never receives hidden
+roles or private reasoning.
 
-Run:  uvicorn server:app --reload   (from the orchestrator/ folder)
+Run:  uvicorn server:app --reload --port 8000   (from backend/)
 """
 from __future__ import annotations
 
-import copy
 import threading
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from game.state import serialize, GameState
 from game import loop
 
 app = FastAPI(title="Pack Orchestrator")
@@ -22,9 +21,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-STATE: GameState | None = None
 _lock = threading.Lock()
 _thread: threading.Thread | None = None
+
+
+@app.get("/health")
+def health():
+    return {"ok": True}
 
 
 @app.get("/")
@@ -32,41 +35,63 @@ def root():
     return {"ok": True, "service": "pack-orchestrator", "running": _is_running()}
 
 
-@app.get("/state")
-def get_state(mode: str = "bettor"):
-    if STATE is None:
-        return {"phase": "idle", "players": [], "markets": [], "discussionLog": []}
-    s = copy.deepcopy(serialize(STATE))
-    if mode != "god":
-        # FOG OF WAR — strip hidden roles + private reasoning for bettors.
-        for p in s["players"]:
-            if not p.get("revealedRole"):
-                p["role"] = None
-        s.pop("privateReasoning", None)
-    return s
-
-
-@app.get("/markets")
-def get_markets(gameId: int | None = None):
-    if STATE is None:
-        return {"markets": []}
-    markets = [m.to_json() for m in STATE.markets if gameId is None or m.game_id == gameId]
-    return {"markets": markets}
-
-
 @app.post("/control/start")
 def start():
-    global STATE, _thread
+    global _thread
     with _lock:
         if _is_running():
             return {"ok": False, "error": "game already running"}
-        STATE = loop.new_state()
-        _thread = threading.Thread(target=_run, args=(STATE,), daemon=True)
+        state = loop.new_state()
+        _thread = threading.Thread(target=_run, args=(state,), daemon=True)
         _thread.start()
-    return {"ok": True}
+    return {"ok": True, "gameId": state.game_id}
 
 
-def _run(state: GameState):
+@app.get("/state")
+def get_state(mode: str = "bettor"):
+    s = loop.STATE
+    if s is None:
+        return {"phase": "idle", "players": [], "markets": [], "discussionLog": []}
+    return serialize(s, mode)
+
+
+def serialize(s, mode: str) -> dict:
+    god = mode == "god"
+    players = []
+    for p in s.players:
+        revealed = p.revealed_role
+        # Fog of war: hide role unless god mode OR it's been publicly revealed.
+        role = p.role if (god or revealed) else None
+        players.append({
+            "idx": p.idx,
+            "name": p.name,
+            "avatarSeed": p.name,
+            "alive": p.alive,
+            "role": role,
+            "revealedRole": revealed,
+            "currentSpeech": p.current_speech,
+        })
+    out = {
+        "gameId": s.game_id,
+        "phase": s.phase,
+        "round": s.round,
+        "maxRounds": s.max_rounds,
+        "pot": s.pot,
+        "speakingIdx": s.speaking_idx,
+        "players": players,
+        "nightResult": s.night_result,
+        "discussionLog": s.discussion_log,
+        "votes": s.votes,
+        "bettingOpen": s.betting_open,
+        "markets": [m.to_json() for m in s.markets],
+        "winner": s.winner,
+    }
+    if god:
+        out["privateReasoning"] = s.private_reasoning
+    return out
+
+
+def _run(state):
     try:
         loop.run_game(state)
     except Exception as e:  # keep the server alive if a game crashes
