@@ -1,13 +1,13 @@
-"""Game history persistence — JSON file on disk (ported from clean-branch).
+"""Game history persistence — JSON file on disk (DB later for production).
 
-Records each completed game (winner, roles, discussion, votes, market pools,
-sponsored payouts) so past matches survive restarts and /history can serve them.
+Records each completed game (winner, roles, full discussion, votes, market
+pools) so the frontend can show past matches and the data survives restarts.
 """
-from __future__ import annotations
-
 import json
 import time
 from pathlib import Path
+
+from .state import GameState
 
 _DATA = Path(__file__).resolve().parents[1] / "data"
 _FILE = _DATA / "history.json"
@@ -27,29 +27,35 @@ def next_game_id() -> int:
     return max((g.get("gameId", 0) for g in games), default=0) + 1
 
 
-def record(state) -> None:
+def record(state: GameState) -> None:
     """Append a completed game's summary. Best-effort; never raises."""
     try:
         _DATA.mkdir(parents=True, exist_ok=True)
         games = load()
-        games.append({
-            "gameId": state.game_id,
-            "winner": state.winner,
-            "rounds": state.round,
-            "endedAt": int(time.time()),
-            "players": [{"name": p.name, "role": p.role} for p in state.players],
-            "discussionLog": state.discussion_log,
-            "votes": state.votes,
-            "markets": [{
-                "marketId": m.market_id,
-                "type": m.type,
-                "round": m.round,
-                "options": m.options,
-                "winningOption": m.winning_option,
-                "pools": m.pools,
-            } for m in state.markets],
-            "payouts": state.payouts,
-        })
+        games.append(
+            {
+                "gameId": state.game_id,
+                "winner": state.winner,
+                "rounds": state.round,
+                "endedAt": int(time.time()),
+                "players": [
+                    {"name": p.name, "role": p.role} for p in state.players
+                ],
+                "discussionLog": state.discussion_log,
+                "votes": state.votes,
+                "markets": [
+                    {
+                        "marketId": m.market_id,
+                        "type": m.type,
+                        "round": m.round,
+                        "options": m.options,
+                        "winningOption": m.winning_option,
+                        "pools": m.pools,
+                    }
+                    for m in state.markets
+                ],
+            }
+        )
         _FILE.write_text(json.dumps(games, indent=2))
     except Exception as e:  # persistence must never break the game
         print(f"[history] failed to record game: {e}")
