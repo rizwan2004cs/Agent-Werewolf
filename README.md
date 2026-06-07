@@ -11,28 +11,29 @@ Three layers:
 
 The chain guarantees fairness: roles committed as hashes before the game, votes immutable, payouts automatic.
 
-**Built for Monad Blitz Bangalore V4 — "The Agent Economy".** North-star spec: [docs/SPEC.md](docs/SPEC.md) ·
-phased plan: [docs/ROADMAP.md](docs/ROADMAP.md).
+**Built for Monad Blitz Bangalore V4 — "The Agent Economy".** Master context: [CLAUDE.md](CLAUDE.md) ·
+authoritative spec: [docs/Architectural decisions/](docs/Architectural%20decisions/) (read `00`–`06`).
 
 ## Repo layout
 
 ```
 pack/
-├── docs/            # design + workstream docs (start with docs/SETUP.md)
-├── contracts/       # Hardhat — AgentWerewolf.sol + WerewolfBetting.sol (Monad testnet)
-├── orchestrator/    # Python — game loop, LLM agents, FastAPI /state, chain calls
-├── frontend/        # React + Vite — god mode / bettor mode + betting UI
-└── shared/abi/      # contract ABIs exported after compile (B & C import these)
+├── CLAUDE.md        # master context — read first
+├── docs/            # design docs; docs/Architectural decisions/ is the authoritative spec
+├── contract/        # Hardhat — AgentWerewolf.sol (game) + WerewolfArena.sol (betting)
+├── backend/         # Python — game loop, LLM agents, FastAPI /state, chain calls
+├── frontend/        # React + Vite — village scene, god/bettor modes, betting UI
+└── shared/abi/      # contract ABIs exported after compile (backend & frontend import these)
 ```
 
 ## Quick start
 
 ```bash
 # 1. Contracts
-cd contracts && npm install && npx hardhat compile
+cd contract && npm install && npx hardhat compile
 
-# 2. Orchestrator
-cd orchestrator
+# 2. Backend
+cd backend
 python -m venv venv
 venv\Scripts\activate           # Windows  (source venv/bin/activate on *nix)
 pip install -r requirements.txt
@@ -42,9 +43,9 @@ uvicorn server:app --reload     # serves http://localhost:8000
 cd frontend && npm install && npm run dev
 ```
 
-See [docs/SETUP.md](docs/SETUP.md) for full environment config, Monad testnet details, and the
-"definition of setup done" checklist. See [docs/INTERFACES.md](docs/INTERFACES.md) for the frozen
-contracts between the three components.
+See [docs/Architectural decisions/06-BUILD-ORDER.md](docs/Architectural%20decisions/06-BUILD-ORDER.md)
+for the build sequence and [02-INTERFACES.md](docs/Architectural%20decisions/02-INTERFACES.md) for the
+frozen state/ABI/HTTP contracts.
 
 ## Status
 

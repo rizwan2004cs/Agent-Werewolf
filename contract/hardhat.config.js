@@ -3,7 +3,10 @@ const path = require("path");
 // Single source of truth: the monorepo root .env.
 require("dotenv").config({ path: path.resolve(__dirname, "..", ".env") });
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+// Only accept a real 32-byte private key (0x + 64 hex). An address (0x + 40)
+// or empty value is ignored, so compile/test never break before a key is set.
+const RAW_KEY = process.env.PRIVATE_KEY || "";
+const PRIVATE_KEY = /^0x[0-9a-fA-F]{64}$/.test(RAW_KEY) ? RAW_KEY : undefined;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {

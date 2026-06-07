@@ -5,16 +5,16 @@ dist/
 npm-debug.log*
 
 # Hardhat
-contracts/artifacts/
-contracts/cache/
-contracts/typechain-types/
+contract/artifacts/
+contract/cache/
+contract/typechain-types/
 
 # Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
-orchestrator/venv/
+backend/venv/
 *.egg-info/
 
 # Env / secrets
