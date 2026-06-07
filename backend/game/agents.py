@@ -162,7 +162,7 @@ def speak(player, state, seer_knowledge=None):
     """-> (speech str, thought str | None). Thought feeds the god-mode panel."""
     if _USE_MOCK:
         return _mock_speak(player, state)
-    raw = call_llm(prompts.day_speak(player, state, seer_knowledge), max_tokens=220)
+    raw = call_llm(prompts.day_speak(player, state, seer_knowledge), max_tokens=110)
     if player.role in ("wolf", "seer"):
         return _split_speech(raw)
     return raw.strip(), None
@@ -178,7 +178,7 @@ def vote(player, state, seer_knowledge=None):
             pool = [p for p in cands if p.role == "wolf"] or cands
         t = random.choice(pool)
         return t, f"VOTE: {t.name}"
-    raw = call_llm(prompts.vote(player, state, seer_knowledge), max_tokens=90)
+    raw = call_llm(prompts.vote(player, state, seer_knowledge), max_tokens=50)
     name = _extract_vote(raw, [c.name for c in cands])
     target = state.by_name(name)
     if not target or target.idx == player.idx:

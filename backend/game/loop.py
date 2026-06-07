@@ -86,16 +86,16 @@ def night_phase(state):
     state.speaking_idx = None
     time.sleep(2.0)
 
-    victim, wreason = agents.night_wolf_pick(state)
-    for w in state.alive_wolves():
-        tgt = victim.name if victim else "?"
-        _reason(state, w.name, "wolf", f"(night) kill {tgt} — {wreason}")
+    victim, _wreason = agents.night_wolf_pick(state)
+    actor = next(iter(state.alive_wolves()), None)
+    if victim and actor:
+        _reason(state, actor.name, "wolf", f"(night) We're taking out {victim.name} tonight.")
 
     seer, target = agents.night_seer_pick(state)
     if seer and target:
-        verdict = "a WOLF" if target.role == ROLE_WOLF else "not a wolf"
+        verdict = "a WOLF!" if target.role == ROLE_WOLF else "not a wolf"
         state._seer_knowledge = {"name": target.name, "role": target.role}
-        _reason(state, seer.name, "seer", f"(night) inspected {target.name}: {verdict}")
+        _reason(state, seer.name, "seer", f"(night) I checked {target.name} — {verdict}")
     else:
         state._seer_knowledge = None
 
