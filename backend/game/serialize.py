@@ -5,6 +5,7 @@ exactly. Fog rules are mandatory and enforced here, never on the client:
   - mode=bettor: hide role unless revealed; omit privateReasoning.
   - mode=god:    return everything.
 """
+from .config import config
 from .state import GameState
 
 
@@ -49,6 +50,7 @@ def to_client(state: GameState, mode: str = "bettor") -> dict:
         "bettingOpen": state.betting_open,
         "markets": [_market(m) for m in state.markets],
         "winner": state.winner,
+        "agentProvider": "mock" if config.use_mock else config.openai_model,
     }
     if mode == "god":
         out["privateReasoning"] = state.private_reasoning

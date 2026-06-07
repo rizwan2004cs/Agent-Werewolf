@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { connect, currentAccount } from "../wallet";
-import { postBet } from "../api";
+import { connect, currentAccount, placeBet } from "../wallet";
 
 function odds(pools, opt) {
   const total = Object.values(pools || {}).reduce((a, b) => a + parseFloat(b || 0), 0);
@@ -53,16 +52,15 @@ export default function BettingPanel({ state }) {
     catch (e) { setMsg(e.message); }
   };
 
-  // House-sponsored bet: no MON, no gas, no signing — MetaMask is only used
-  // to identify your address. Winnings are sent to it automatically.
+  // Direct on-chain bet: the bettor stakes MON from their own wallet via
+  // MetaMask; the contract pays winners on claim (see GameOverOverlay).
   const onBet = async (marketId, optionIdx, opt) => {
     setMsg(null);
     try {
-      let addr = account;
-      if (!addr) { addr = await connect(); setAccount(addr); }
+      if (!account) setAccount(await connect());
       setBusy(true);
-      const message = await postBet(marketId, opt, addr, amount);
-      setMsg(`✅ ${message} — winnings go straight to ${short(addr)}`);
+      const hash = await placeBet(marketId, optionIdx, amount);
+      setMsg(`✅ Bet ${amount} MON on ${opt} — tx ${short(hash)}`);
     } catch (e) {
       setMsg("⚠ " + (e.shortMessage || e.message));
     } finally {
@@ -76,7 +74,7 @@ export default function BettingPanel({ state }) {
         {frozen ? (
           <span className="bet-locked">🔒 Betting closed — watch the discussion</span>
         ) : (
-          <span className="bet-cta">💰 Place your bet! (gas-free — house stakes for you)</span>
+          <span className="bet-cta">💰 Place your bet! (staked from your wallet)</span>
         )}
         <span className="bet-controls">
           <label className="amount">

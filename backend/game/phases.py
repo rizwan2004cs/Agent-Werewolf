@@ -6,7 +6,7 @@ narrator. They contain no transport, parsing, or print logic of their own.
 """
 import time
 
-from . import agents, rules
+from . import agents, livestate, rules
 from .chain import markets
 from .config import config
 from .narrator import Narrator
@@ -20,6 +20,17 @@ def _beat(seconds: float) -> None:
         time.sleep(seconds * config.pace)
 
 
+def _hold_speech(text: str) -> None:
+    """Keep a spoken line on screen long enough for the UI typewriter (~30
+    chars/sec) to finish rendering it, plus a short reading beat — so each
+    agent finishes before the next one speaks. Skipped entirely at PACE=0
+    (instant console/test runs). Length-based, not scaled by PACE."""
+    if config.pace <= 0:
+        return
+    n = len(text or "")
+    time.sleep(min(16.0, max(3.5, n / 22)))  # > n/30 typing time, with margin
+
+
 def setup(state: GameState, nar: Narrator) -> None:
     state.phase = "setup"
     state.betting_open = True
@@ -27,6 +38,7 @@ def setup(state: GameState, nar: Narrator) -> None:
     markets.open_game_winner(state)
     markets.refresh_pools(state)
     _beat(2)
+    livestate.save(state)
 
 
 def night(state: GameState, nar: Narrator) -> None:
@@ -46,6 +58,7 @@ def night(state: GameState, nar: Narrator) -> None:
         target=target.name if target else None,
         target_role=target.role if target else None,
     )
+    livestate.save(state)
 
 
 def morning(state: GameState, nar: Narrator) -> None:
@@ -58,6 +71,7 @@ def morning(state: GameState, nar: Narrator) -> None:
     state.betting_open = True
     markets.refresh_pools(state)
     _beat(2)
+    livestate.save(state)
 
 
 def discussion(state: GameState, nar: Narrator) -> None:
@@ -84,9 +98,10 @@ def discussion(state: GameState, nar: Narrator) -> None:
                 {"speaker": p.name, "role": p.role, "thought": thought}
             )
             nar.emit("speech", name=p.name, text=speech)
-            _beat(1.5)
+            _hold_speech(speech)  # let the line fully render before the next speaker
             p.current_speech = None
     state.speaking_idx = None
+    livestate.save(state)
 
 
 def voting(state: GameState, nar: Narrator) -> None:
@@ -105,6 +120,7 @@ def voting(state: GameState, nar: Narrator) -> None:
     markets.resolve_who_voted_out(state, out.name)
     state.phase = "resolution"
     _beat(1)
+    livestate.save(state)
 
 
 def end(state: GameState, nar: Narrator) -> None:
@@ -123,3 +139,4 @@ def end(state: GameState, nar: Narrator) -> None:
     # a market that will never resolve.
     markets.freeze_open(state)
     markets.resolve_game_winner(state, state.winner)
+    livestate.save(state)

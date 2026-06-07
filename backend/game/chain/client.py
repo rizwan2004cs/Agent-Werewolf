@@ -77,7 +77,9 @@ def _send(fn):
             nonce = _w3.eth.get_transaction_count(_acct.address, "pending")
             h = _build_and_send(fn, nonce)
         _next_nonce = nonce + 1
-    return _w3.eth.wait_for_transaction_receipt(h)
+    # Bound the wait so a tx that never mines can't freeze the game loop
+    # (markets.py wraps this in try/except and continues on timeout).
+    return _w3.eth.wait_for_transaction_receipt(h, timeout=60)
 
 
 def open_market(game_id: int, num_options: int) -> int:

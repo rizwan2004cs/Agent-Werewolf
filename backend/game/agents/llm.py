@@ -13,7 +13,13 @@ def _model(json_mode: bool):
     if json_mode not in _models:
         from langchain_openai import ChatOpenAI
 
-        kwargs = {"model": config.openai_model, "api_key": config.openai_api_key}
+        kwargs = {
+            "model": config.openai_model,
+            "api_key": config.openai_api_key,
+            # Bound every request so a stalled call can never freeze the game.
+            "timeout": 20,
+            "max_retries": 1,
+        }
         if json_mode:
             kwargs["model_kwargs"] = {"response_format": {"type": "json_object"}}
         _models[json_mode] = ChatOpenAI(**kwargs)
