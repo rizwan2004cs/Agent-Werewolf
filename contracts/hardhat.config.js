@@ -1,5 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+const path = require("path");
+// Single source of truth: the monorepo root .env.
+require("dotenv").config({ path: path.resolve(__dirname, "..", ".env") });
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 

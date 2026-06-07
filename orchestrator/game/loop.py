@@ -33,7 +33,11 @@ ROSTER = [
 
 POT_MON = os.environ.get("GAME_POT_MON", "1.0")
 PACE = float(os.environ.get("PACE_SECONDS", "1.2"))   # gap between speeches/beats
-_DEPLOYER_KEY = os.environ.get("ORCHESTRATOR_KEY", "0x" + "00" * 32)
+_DEPLOYER_KEY = (
+    os.environ.get("ORCHESTRATOR_KEY")
+    or os.environ.get("PRIVATE_KEY")
+    or "0x" + "00" * 32
+)
 
 _market_counter = 0
 

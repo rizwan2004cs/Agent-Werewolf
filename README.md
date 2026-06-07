@@ -48,5 +48,7 @@ contracts between the three components.
 
 ## Status
 
-Chain calls run in **mock mode** by default (`MOCK_CHAIN=1`) so the full game runs locally without a
-funded wallet. Set `MOCK_CHAIN=0` and fill `orchestrator/.env` to deploy + run against Monad testnet.
+All config lives in a single **root `.env`** (copy from [.env.example](.env.example)) — read by both the
+orchestrator and Hardhat. Chain calls run in **mock mode** by default (`MOCK_CHAIN=1`) so the full game
+runs locally without a funded wallet. Set `OPENAI_API_KEY` for real agents; set `MOCK_CHAIN=0` +
+`PRIVATE_KEY` to deploy and run against a live Monad network.
