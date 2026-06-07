@@ -15,6 +15,7 @@ function short(a) {
 
 function Market({ m, frozen, amount, onBet, busy }) {
   const win = m.resolved ? m.winningOption : null;
+  const offchain = m.marketId < 0; // openMarket failed (chain not configured)
   return (
     <div className={`market ${m.resolved ? "resolved" : ""}`}>
       <div className="market-title">{TITLES[m.type] || m.type}</div>
@@ -23,7 +24,7 @@ function Market({ m, frozen, amount, onBet, busy }) {
           <button
             key={opt}
             className={`bet-btn ${win === opt ? "won" : ""}`}
-            disabled={frozen || m.resolved || busy}
+            disabled={frozen || m.resolved || busy || offchain}
             onClick={() => onBet(m.marketId, i, opt)}
           >
             <span className="opt-name">{opt}</span>
@@ -32,6 +33,7 @@ function Market({ m, frozen, amount, onBet, busy }) {
         ))}
       </div>
       {m.resolved && <div className="market-result">✓ {m.winningOption}</div>}
+      {offchain && <div className="market-result">⚠ off-chain — betting unavailable</div>}
     </div>
   );
 }
@@ -56,6 +58,10 @@ export default function BettingPanel({ state }) {
   // MetaMask; the contract pays winners on claim (see GameOverOverlay).
   const onBet = async (marketId, optionIdx, opt) => {
     setMsg(null);
+    if (marketId < 0) {
+      setMsg("⚠ This market isn't on-chain (server chain config missing) — betting unavailable.");
+      return;
+    }
     try {
       if (!account) setAccount(await connect());
       setBusy(true);

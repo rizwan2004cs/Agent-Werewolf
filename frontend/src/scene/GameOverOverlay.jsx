@@ -37,7 +37,9 @@ function Claims({ markets }) {
   const [rows, setRows] = useState(null);
   const [msg, setMsg] = useState(null);
   const [busy, setBusy] = useState(false);
-  const resolved = (markets || []).filter((m) => m.resolved);
+  // marketId < 0 means the on-chain openMarket failed (chain not configured),
+  // so there's nothing to claim — skip them or getMarket(-1) throws.
+  const resolved = (markets || []).filter((m) => m.resolved && m.marketId >= 0);
 
   useEffect(() => {
     if (!account || !resolved.length || !window.ethereum) return;
