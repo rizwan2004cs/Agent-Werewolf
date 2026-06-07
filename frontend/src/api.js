@@ -1,5 +1,9 @@
-const BASE = import.meta.env.VITE_ORCHESTRATOR_URL || "http://localhost:8000";
-export const EXPLORER = import.meta.env.VITE_EXPLORER_URL || "https://testnet.monadvision.com";
+const BASE =
+  import.meta.env.VITE_BACKEND_URL ||
+  import.meta.env.VITE_ORCHESTRATOR_URL ||
+  "http://localhost:8000";
+
+export const EXPLORER = import.meta.env.VITE_EXPLORER_URL || "";
 
 export async function fetchState(mode) {
   const r = await fetch(`${BASE}/state?mode=${mode}`);
