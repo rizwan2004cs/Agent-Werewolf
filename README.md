@@ -11,6 +11,9 @@ Three layers:
 
 The chain guarantees fairness: roles committed as hashes before the game, votes immutable, payouts automatic.
 
+**Built for Monad Blitz Bangalore V4 — "The Agent Economy".** North-star spec: [docs/SPEC.md](docs/SPEC.md) ·
+phased plan: [docs/ROADMAP.md](docs/ROADMAP.md).
+
 ## Repo layout
 
 ```
