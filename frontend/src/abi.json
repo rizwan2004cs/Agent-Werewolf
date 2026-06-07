@@ -87,6 +87,12 @@
         "internalType": "uint256",
         "name": "gameId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "numOptions",
+        "type": "uint8"
       }
     ],
     "name": "MarketOpened",

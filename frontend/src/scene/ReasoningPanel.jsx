@@ -1,21 +1,20 @@
-// God-mode dramatic-irony panel: what agents are really thinking.
-const ROLE_CLASS = { wolf: "wolf", seer: "seer", villager: "villager" };
-
+// God-mode dramatic irony: what the agents are really thinking, as it happens.
+// Content scrolls inside the card so it never grows past the screen.
 export default function ReasoningPanel({ reasoning }) {
+  const items = (reasoning || []).slice(-30).reverse();
   return (
-    <section className="reasoning-panel">
+    <aside className="reasoning-panel">
       <h3>🧠 What they're really thinking</h3>
-      <div className="panel-scroll">
-        {!reasoning?.length && (
-          <div className="log-empty">Private thoughts appear during discussion…</div>
-        )}
-        {reasoning?.slice(-20).map((r, i) => (
-          <div key={i} className="thought">
-            <b className={ROLE_CLASS[r.role] || ""}>{r.speaker}</b>
-            <span className="thought-role"> ({r.role})</span>: <i>{r.thought}</i>
+      <div className="reasoning-scroll">
+        {items.length === 0 && <div className="muted">Secrets will surface here…</div>}
+        {items.map((r, i) => (
+          <div key={i} className={`thought ${r.role}`}>
+            <b>{r.speaker}</b>
+            {r.role && <span className={`mini-role ${r.role}`}>{r.role}</span>}
+            <i>{r.thought}</i>
           </div>
         ))}
       </div>
-    </section>
+    </aside>
   );
 }

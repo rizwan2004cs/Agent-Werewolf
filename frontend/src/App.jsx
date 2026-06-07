@@ -1,62 +1,71 @@
-import { useState } from "react";
-import { startGame } from "./api/client";
-import { useGameState } from "./hooks/useGameState";
+import { useEffect, useRef, useState } from "react";
+import { fetchState, startGame } from "./api";
 import TopBar from "./scene/TopBar";
 import VillageScene from "./scene/VillageScene";
-import DiscussionLog from "./scene/DiscussionLog";
+import DialogueOverlay from "./scene/DialogueOverlay";
+import DiscussionFeed from "./scene/DiscussionFeed";
+import ReasoningPanel from "./scene/ReasoningPanel";
 import GameOverOverlay from "./scene/GameOverOverlay";
-import HistoryPanel from "./scene/HistoryPanel";
-import PhaseToast from "./scene/PhaseToast";
-import VoteTally from "./scene/VoteTally";
 import BettingPanel from "./betting/BettingPanel";
+import "./styles.css";
 
-// Layout: TopBar, then a 3-column row — left transcript, center table, right
-// betting (bettor mode). God-mode "what they're thinking" is now the thought
-// cloud over the speaker (in the scene), so there's no side reasoning panel to
-// collide with the betting panel.
 export default function App() {
-  const [mode, setMode] = useState("bettor"); // "god" | "bettor" — audience bets by default
-  const [showHistory, setShowHistory] = useState(false);
-  const state = useGameState(mode);
+  const [mode, setMode] = useState("god");
+  const [state, setState] = useState(null);
+  const [err, setErr] = useState(null);
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+
+  useEffect(() => {
+    let active = true;
+    const tick = async () => {
+      try {
+        const s = await fetchState(modeRef.current);
+        if (active) { setState(s); setErr(null); }
+      } catch (e) {
+        if (active) setErr(e.message);
+      }
+    };
+    tick();
+    const id = setInterval(tick, 500);
+    return () => { active = false; clearInterval(id); };
+  }, []);
+
+  const onStart = async () => {
+    try { await startGame(); } catch (e) { setErr(e.message); }
+  };
 
   const phase = state?.phase ?? "idle";
-  const isNight = phase === "night" || phase === "setup" || phase === "idle";
+  const isNight = phase === "night" || phase === "setup";
+  const godMode = mode === "god";
+  const playing = phase !== "idle";
 
   return (
-    <div className={`app ${isNight ? "night" : "day"} mode-${mode}`}>
+    <div className={`app ${isNight ? "night" : "day"} ${mode}`}>
       <TopBar
         state={state}
         mode={mode}
         onToggleMode={() => setMode((m) => (m === "god" ? "bettor" : "god"))}
-        onStart={startGame}
-        onShowHistory={() => setShowHistory(true)}
+        onStart={onStart}
       />
+      {err && <div className="err-banner">⚠ Can't reach backend ({err}). Is uvicorn running on :8000?</div>}
 
-      <div className="layout">
-        <aside className="col col-left">
-          <DiscussionLog
-            log={state?.discussionLog}
-            speakingName={
-              state?.players?.find((p) => p.idx === state?.speakingIdx)?.name ?? null
-            }
-          />
-        </aside>
-
-        <main className="col col-center">
-          <VillageScene state={state} godMode={mode === "god"} />
-          <VoteTally state={state} />
-        </main>
-
-        {mode === "bettor" && (
-          <aside className="col col-right">
-            <BettingPanel state={state} />
+      <div className="main">
+        <div className="stage">
+          <VillageScene state={state} godMode={godMode} />
+          {playing && <DialogueOverlay state={state} godMode={godMode} />}
+          {isNight && playing && <div className="night-toast">🌙 The village sleeps…</div>}
+        </div>
+        {playing && (
+          <aside className="sidebar">
+            <DiscussionFeed log={state?.discussionLog} players={state?.players} />
+            {godMode && <ReasoningPanel reasoning={state?.privateReasoning} players={state?.players} />}
           </aside>
         )}
       </div>
 
-      <PhaseToast phase={phase} />
-      <HistoryPanel open={showHistory} onClose={() => setShowHistory(false)} />
-      {phase === "ended" && <GameOverOverlay state={state} onNewGame={startGame} />}
+      {!godMode && <BettingPanel state={state} />}
+      <GameOverOverlay state={state} onNewGame={onStart} />
     </div>
   );
 }
