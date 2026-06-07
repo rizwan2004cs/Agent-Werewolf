@@ -1,0 +1,36 @@
+# Node
+node_modules/
+dist/
+.DS_Store
+npm-debug.log*
+
+# Hardhat
+contracts/artifacts/
+contracts/cache/
+contracts/typechain-types/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+orchestrator/venv/
+*.egg-info/
+
+# Env / secrets
+.env
+.env.local
+*.local
+
+# Frontend
+frontend/dist/
+frontend/.vite/
+
+# Misc
+.idea/
+.vscode/
+*.log
+
+# Local tooling / skill caches (not project code)
+.agents/
+.claude/

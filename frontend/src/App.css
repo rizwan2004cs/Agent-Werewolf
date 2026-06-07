@@ -1,0 +1,141 @@
+:root {
+  --bg: #0b0e16;
+  --panel: #141a26;
+  --panel-2: #1b2330;
+  --line: #28313f;
+  --text: #e7ecf3;
+  --muted: #8a93a3;
+  --accent: #f59e0b;
+  --wolf: #ef4444;
+  --village: #34d399;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 50% -10%, #16203a 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.app { max-width: 1280px; margin: 0 auto; padding: 16px; }
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.brand { font-weight: 800; font-size: 22px; letter-spacing: 2px; }
+.status { display: flex; gap: 10px; align-items: center; flex: 1; flex-wrap: wrap; }
+.status span {
+  padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  background: var(--panel-2); border: 1px solid var(--line);
+}
+.phase-night { background: #1e293b; }
+.phase-discussion { background: #3b2f10; color: #fcd34d; }
+.phase-voting { background: #3b1020; color: #fda4af; }
+.phase-ended { background: #10241b; color: var(--village); }
+.winner-wolves { color: var(--wolf); }
+.winner-village { color: var(--village); }
+.controls { display: flex; gap: 8px; }
+
+button {
+  cursor: pointer; border: 1px solid var(--line); background: var(--panel-2);
+  color: var(--text); padding: 8px 14px; border-radius: 10px; font-weight: 600;
+  transition: transform .1s, background .2s, border-color .2s;
+}
+button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.start { background: #1d2a1f; border-color: #2f5a3a; }
+.toggle { background: #1c2336; }
+.start.big { font-size: 18px; padding: 14px 28px; margin-top: 18px; }
+
+/* ---------- board ---------- */
+.board-wrap { position: relative; margin: 18px 0; }
+.board {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+  transition: filter 1s;
+}
+.board.night { filter: brightness(.35) saturate(.7); }
+@media (max-width: 900px) { .board { grid-template-columns: repeat(3, 1fr); } }
+
+.card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 12px; text-align: center; min-height: 150px;
+  transition: opacity .4s, transform .4s, filter .4s, border-color .3s;
+}
+.card.dead { opacity: .4; transform: scale(.97); filter: grayscale(1); }
+.avatar { font-size: 36px; }
+.name { font-weight: 700; margin-top: 4px; }
+.role {
+  display: inline-block; margin-top: 6px; font-size: 12px; text-transform: capitalize;
+  padding: 2px 8px; border-radius: 999px; background: var(--panel-2);
+}
+.role-wolf { color: var(--wolf); border: 1px solid #5b2020; }
+.role-seer { color: #c4b5fd; border: 1px solid #43356b; }
+.role-villager { color: var(--village); border: 1px solid #1f4d3a; }
+.bubble {
+  margin-top: 10px; font-size: 12.5px; line-height: 1.4; color: #cbd5e1;
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px; text-align: left;
+}
+
+.night-overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 700; color: #cbd5e1; pointer-events: none;
+  text-shadow: 0 2px 20px #000;
+}
+
+/* ---------- grids ---------- */
+.god-grid, .bettor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 900px) { .god-grid, .bettor-grid { grid-template-columns: 1fr; } }
+
+.feed, .reasoning, .betting {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px;
+}
+.feed h3, .reasoning h3, .betting h3 { margin: 0 0 10px; font-size: 15px; }
+.feed-scroll { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+
+.line {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 10px; animation: fadein .4s ease;
+}
+.speaker { font-weight: 700; margin-right: 6px; }
+.text { color: #d7dee8; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.thought {
+  background: var(--panel-2); border-left: 3px solid #c4b5fd; border-radius: 8px;
+  padding: 8px 10px; font-size: 13px; animation: fadein .4s ease;
+}
+
+/* ---------- betting ---------- */
+.frozen-banner {
+  background: #2a1010; border: 1px solid #5b2020; color: #fda4af;
+  padding: 8px 10px; border-radius: 10px; margin-bottom: 10px; font-weight: 600;
+}
+.market { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+.market.resolved { opacity: .75; }
+.market h4 { margin: 0 0 8px; font-size: 13.5px; display: flex; justify-content: space-between; }
+.pot-sm { color: var(--accent); font-weight: 700; }
+.options { display: flex; flex-direction: column; gap: 6px; }
+.opt { display: flex; justify-content: space-between; background: #10151f; }
+.opt.win { border-color: var(--village); color: var(--village); }
+.odds { color: var(--accent); font-weight: 700; }
+.resolved-tag { margin-top: 6px; font-size: 12px; color: var(--village); }
+.settled-head { margin: 10px 0 6px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+/* ---------- misc ---------- */
+.muted { color: var(--muted); }
+.err-banner { background: #2a1010; border: 1px solid #5b2020; color: #fda4af; padding: 8px 12px; border-radius: 10px; margin: 10px 0; }
+.loading, .idle-hero { text-align: center; padding: 80px 20px; }
+.brand-lg { font-size: 48px; font-weight: 800; letter-spacing: 4px; }
+.idle-hero h1 { font-size: 40px; margin-bottom: 6px; }
+.idle-hero p { color: var(--muted); }
+code { background: var(--panel-2); padding: 2px 6px; border-radius: 6px; }
