@@ -1,51 +1,61 @@
-# Render Blueprint — deploys the Pack stack (backend API + static frontend).
-# In Render: New > Blueprint > point at this repo. Secrets (sync:false) are
-# entered in the Render dashboard, never committed here.
+# Render Blueprint for Pack (deploying clean-main branch).
+# Docs: https://render.com/docs/blueprint-spec
 #
-# Caveats for the free plan:
-#  - The Python web service sleeps after ~15 min idle and resets in-memory game
-#    state on wake/restart (history.json is also ephemeral on free disk).
-#  - For a live multi-audience demo, keep the backend warm or use a paid plan.
+# Notes:
+# - Both services are pinned to `clean-main`.
+# - Keep secrets in Render Dashboard via `sync: false`.
+# - On free plan, backend may sleep after idle periods.
 services:
-  # ---- FastAPI backend: game loop + /state + /history + chain calls ----
+  # ---- FastAPI backend ----
   - type: web
     name: pack-backend
     runtime: python
     rootDir: backend
+    branch: clean-main
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    autoDeployTrigger: commit
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: python -m uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
-      - key: OPENAI_API_KEY        # secret — set in dashboard
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: OPENAI_API_KEY
         sync: false
       - key: OPENAI_MODEL
         value: gpt-4o-mini
-      - key: RPC_URL               # contract.dev stagenet RPC (has a token) — secret
+      - key: RPC_URL
         sync: false
       - key: CHAIN_ID
         value: "143"
       - key: CONTRACT_ADDRESS
-        value: "0x3e78581cB1e864489B1975f1896cA599efa04258"
-      - key: OPERATOR_KEY          # operator private key — secret, NEVER commit
+        sync: false
+      - key: OPERATOR_KEY
         sync: false
       - key: PACE
-        value: "3"
+        value: "2.5"
 
-  # ---- Vite/React frontend: served as a static site ----
+  # ---- React frontend (static) ----
   - type: web
     name: pack-frontend
     runtime: static
     rootDir: frontend
-    buildCommand: npm install && npm run build
+    branch: clean-main
+    plan: free
+    autoDeployTrigger: commit
+    buildCommand: npm ci && npm run build
     staticPublishPath: dist
     envVars:
-      - key: VITE_BACKEND_URL      # set to the deployed pack-backend URL
-        sync: false
+      - key: NODE_VERSION
+        value: 22.12.0
+      # Update if backend service URL differs on your Render account.
+      - key: VITE_BACKEND_URL
+        value: https://pack-backend.onrender.com
       - key: VITE_CONTRACT_ADDRESS
-        value: "0x3e78581cB1e864489B1975f1896cA599efa04258"
+        sync: false
       - key: VITE_CHAIN_ID
         value: "143"
-      - key: VITE_RPC_URL          # baked into the client bundle (public) — set in dashboard
+      - key: VITE_RPC_URL
         sync: false
       - key: VITE_EXPLORER_URL
         value: ""
