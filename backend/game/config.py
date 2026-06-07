@@ -4,28 +4,13 @@ Nothing else in the codebase should touch os.environ. Import `config` and read
 attributes. `.env` is loaded here if python-dotenv is available.
 """
 import os
-from pathlib import Path
 
 try:
     from dotenv import load_dotenv
 
-    # Single root .env (repo root, gitignored) is the source of truth;
-    # also honour a local backend/.env and plain process env.
-    _ROOT_ENV = Path(__file__).resolve().parents[2] / ".env"
-    if _ROOT_ENV.exists():
-        load_dotenv(_ROOT_ENV)
     load_dotenv()
 except Exception:
     pass
-
-
-def _env(*names: str, default: str = "") -> str:
-    """First non-empty value among aliases (new name first, legacy fallback)."""
-    for n in names:
-        v = os.environ.get(n, "").strip()
-        if v:
-            return v
-    return default
 
 
 class Config:
@@ -37,17 +22,13 @@ class Config:
         self.use_mock: bool = not bool(self.openai_api_key)
 
         # --- Pacing --- (PACE=0 runs instantly; >1 slows the "beats")
-        self.pace: float = float(_env("PACE", "PACE_SECONDS", default="2.0"))
+        self.pace: float = float(os.environ.get("PACE", "1.0"))
 
         # --- Chain (contract.dev stagenet; wired at Milestone 5) ---
-        self.rpc_url: str = _env("RPC_URL")
-        self.chain_id: str = _env("CHAIN_ID")
-        self.contract_address: str = _env("CONTRACT_ADDRESS", "GAME_CONTRACT")
-        self.betting_address: str = _env("BETTING_CONTRACT")
-        self.operator_key: str = _env("OPERATOR_KEY", "PRIVATE_KEY")
-        # MOCK_CHAIN=1 forces chain writes off even if RPC vars are set.
-        if os.environ.get("MOCK_CHAIN", "").strip() == "1":
-            self.rpc_url = ""
+        self.rpc_url: str = os.environ.get("RPC_URL", "")
+        self.chain_id: str = os.environ.get("CHAIN_ID", "")
+        self.contract_address: str = os.environ.get("CONTRACT_ADDRESS", "")
+        self.operator_key: str = os.environ.get("OPERATOR_KEY", "")
 
     @property
     def llm_mode(self) -> str:

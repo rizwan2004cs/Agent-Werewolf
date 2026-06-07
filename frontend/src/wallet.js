@@ -19,6 +19,8 @@ function friendly(err) {
     return new Error("MetaMask was reloaded — refresh this page (F5), then try again.");
   if (err && err.code === 4001) return new Error("Request rejected in MetaMask.");
   if (/insufficient funds/i.test(m)) return new Error("Not enough MON on this account (chain 143). Fund it first.");
+  if (/could not decode result data|BAD_DATA/i.test(m))
+    return new Error("Couldn't read this market on-chain — make sure MetaMask is on chain " + CHAIN_ID + " (Monad/contract.dev). The market may not exist on the connected network.");
   if (/missing revert data|CALL_EXCEPTION|cannot estimate gas|execution reverted/i.test(m))
     return new Error("Bet rejected by the contract — the betting window has most likely locked for this phase. Try again when betting reopens.");
   return err instanceof Error ? err : new Error(m);
@@ -97,18 +99,22 @@ export async function placeBet(marketId, optionIdx, amountMon = "0.05") {
 // Mirrors the contract math: payout = totalPool * myStake / winningPool.
 // Returns { payout: "1.2345" (MON string), done: bool } — payout "0" if nothing.
 export async function previewClaim(marketId) {
-  const c = await getContract();
-  const me = await c.runner.getAddress();
-  const [, , totalPool, , resolved, winningOption] = await c.getMarket(marketId);
-  if (!resolved) return { payout: "0", done: false };
-  const done = await c.claimed(marketId, me);
-  if (done) return { payout: "0", done: true };
-  const myStake = await c.stakeOf(marketId, me, winningOption);
-  if (myStake === 0n) return { payout: "0", done: false };
-  const pools = await c.getPools(marketId);
-  const winPool = pools[Number(winningOption)];
-  const payout = winPool === 0n ? 0n : (totalPool * myStake) / winPool;
-  return { payout: formatEther(payout), done: false };
+  try {
+    const c = await getContract();
+    const me = await c.runner.getAddress();
+    const [, , totalPool, , resolved, winningOption] = await c.getMarket(marketId);
+    if (!resolved) return { payout: "0", done: false };
+    const done = await c.claimed(marketId, me);
+    if (done) return { payout: "0", done: true };
+    const myStake = await c.stakeOf(marketId, me, winningOption);
+    if (myStake === 0n) return { payout: "0", done: false };
+    const pools = await c.getPools(marketId);
+    const winPool = pools[Number(winningOption)];
+    const payout = winPool === 0n ? 0n : (totalPool * myStake) / winPool;
+    return { payout: formatEther(payout), done: false };
+  } catch (err) {
+    throw friendly(err);
+  }
 }
 
 export async function claimWinnings(marketId) {

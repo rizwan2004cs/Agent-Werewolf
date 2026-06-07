@@ -11,8 +11,26 @@ export async function fetchState(mode) {
   return r.json();
 }
 
-export async function startGame() {
-  return fetch(`${BASE}/control/start`, { method: "POST" });
+export async function startGame(kind = "betting") {
+  return fetch(`${BASE}/control/start?kind=${kind}`, { method: "POST" });
+}
+
+// "Play yourself" — submit the human player's discussion line.
+export async function sendSpeech(text) {
+  return fetch(`${BASE}/control/say`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+}
+
+// "Play yourself" — submit the human player's vote.
+export async function sendVote(target) {
+  return fetch(`${BASE}/control/vote`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ target }),
+  });
 }
 
 // House-sponsored bet: gas-free, no MON needed — just your address.

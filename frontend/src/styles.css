@@ -413,3 +413,56 @@ body { font-family: var(--font-body); font-size: 18px; image-rendering: pixelate
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes pulse { 50% { opacity: .55; } }
 @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+
+/* ---------------- home chooser ---------------- */
+.home {
+  height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, #0b1d12, #060f0a);
+  color: var(--text); font-family: var(--font-body);
+}
+.home-card { text-align: center; padding: 24px; }
+.home-title { font-family: var(--font-pixel); font-size: 40px; color: var(--gold); text-shadow: 4px 4px 0 #000; margin: 0; }
+.home-sub { opacity: .8; font-size: 18px; margin: 10px 0 28px; }
+.home-modes { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; }
+.home-mode {
+  width: 300px; cursor: pointer; text-align: left; color: var(--text);
+  background: var(--panel); border: 4px solid var(--px-border);
+  box-shadow: 6px 6px 0 var(--px-border); padding: 20px; transition: none;
+}
+.home-mode:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--px-border); }
+.home-mode.betting { border-top: 6px solid var(--gold); }
+.home-mode.play { border-top: 6px solid var(--village); }
+.home-mode-icon { font-size: 40px; }
+.home-mode-name { font-family: var(--font-pixel); font-size: 14px; margin: 10px 0 8px; }
+.home-mode-desc { font-size: 16px; opacity: .85; line-height: 1.3; }
+
+/* ---------------- play-yourself panel ---------------- */
+.play-panel {
+  background: var(--panel); border: 3px solid var(--px-border);
+  box-shadow: 4px 4px 0 var(--px-border); padding: 12px 14px; color: var(--text);
+}
+.you-banner { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 17px; margin-bottom: 8px; }
+.you-banner b { color: var(--gold); }
+.you-dead { color: var(--wolf); font-family: var(--font-pixel); font-size: 9px; }
+.secret {
+  font-size: 15px; padding: 7px 10px; margin-bottom: 8px;
+  border: 2px solid var(--px-border); background: var(--panel-2);
+}
+.secret.wolf { border-left: 5px solid var(--wolf); }
+.secret.seer { border-left: 5px solid var(--seer); }
+.your-turn { margin-top: 10px; border-top: 2px dashed var(--panel-edge); padding-top: 10px; }
+.turn-label { font-family: var(--font-pixel); font-size: 10px; color: var(--gold); margin-bottom: 8px; }
+.your-turn textarea {
+  width: 100%; resize: vertical; font-family: var(--font-body); font-size: 17px;
+  background: #0e1430; color: var(--text); border: 2px solid var(--panel-edge); padding: 8px;
+}
+.your-turn .btn { margin-top: 8px; }
+.vote-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.watching { font-size: 15px; opacity: .7; margin-top: 8px; }
+
+.you-result {
+  font-family: var(--font-pixel); font-size: 13px; margin: 6px 0 14px;
+  padding: 8px; border: 3px solid var(--px-border);
+}
+.you-result.win { background: var(--village); color: #04210c; }
+.you-result.lose { background: var(--wolf); color: #fff; }

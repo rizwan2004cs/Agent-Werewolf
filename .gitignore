@@ -1,36 +1,23 @@
-# Node
-node_modules/
-dist/
-.DS_Store
-npm-debug.log*
+# --- secrets (NEVER commit) ---
+.env
+*.env
+!.env.example
 
-# Hardhat
-contract/artifacts/
-contract/cache/
-contract/typechain-types/
-
-# Python
+# --- python ---
 __pycache__/
 *.py[cod]
+*.egg-info/
 .venv/
 venv/
-backend/venv/
-*.egg-info/
 
-# Env / secrets
-.env
-.env.local
-*.local
+# --- node / frontend build ---
+node_modules/
+dist/
 
-# Frontend
-frontend/dist/
-frontend/.vite/
+# --- runtime data ---
+backend/data/
 
-# Misc
-.idea/
-.vscode/
+# --- misc ---
+.DS_Store
+Thumbs.db
 *.log
-
-# Local tooling / skill caches (not project code)
-.agents/
-.claude/
