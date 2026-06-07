@@ -1,0 +1,1426 @@
+[
+  {
+    "gameId": 1,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780828256,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "seer"
+      },
+      {
+        "name": "Caspian",
+        "role": "villager"
+      },
+      {
+        "name": "Mira",
+        "role": "villager"
+      },
+      {
+        "name": "Theron",
+        "role": "villager"
+      },
+      {
+        "name": "Dax",
+        "role": "wolf"
+      },
+      {
+        "name": "Vera",
+        "role": "villager"
+      },
+      {
+        "name": "Orin",
+        "role": "wolf"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "As we gather our thoughts, I find it crucial to note that trusting our instincts is vital. I recall Mira expressing her thoughts on honesty in play, which points towards her being aligned with the village. Let\u2019s consider the information we have carefully before making any rash accusations against one another.",
+        "ts": 1780828140
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "I appreciate your thoughts, Luna, but we must remember that honesty can also be interpreted in many ways\u2014like how some folks claim they're just 'bad at reading the room'. For instance, I've noticed Orin's suggestions seem oddly vague; perhaps they\u2019re trying to deflect attention away from themselves?",
+        "ts": 1780828144
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "I appreciate the points raised by both Luna and Caspian. However, I must express concern over Dax's hesitance in contributing to our discussions; a lack of engagement could be a tactic to avoid scrutiny. We should keep a close eye on him as we move forward.",
+        "ts": 1780828149
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I understand the concerns raised about my hesitance, but it's important to note that not everyone processes information the same way. I do find it interesting that Caspian is quick to place suspicion on Orin without solid proof; perhaps we should consider if he\u2019s trying to manipulate the narrative. Let's focus on gathering more evidence before jumping to conclusions.",
+        "ts": 1780828154
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "While it's vital to trust our instincts, I believe we must anchor our discussions in tangible evidence. Dax's point about Caspian's accusations raises a valid concern, as we should scrutinize those who are quick to assign blame without a solid foundation. Let's examine the dynamics of our conversations closely, especially considering who seems to be leading the narrative and why.",
+        "ts": 1780828160
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "I understand the concerns about engagement, but we should also be wary of those who are quick to redirect suspicion onto others without substantial evidence. It may be beneficial to consider why certain players, like Caspian, seem eager to cast blame rather than work collaboratively towards finding the truth. Let's focus on evaluating everyone's comments more objectively.",
+        "ts": 1780828165
+      },
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "I sense a deeper layer to our discussions that we must unravel. While I agree with the importance of scrutinizing those who cast blame hastily, I feel inclined to remind everyone of Mira's contribution and her belief in honesty throughout the game. Perhaps there's more to uncover regarding the intentions behind our accusations.",
+        "ts": 1780828170
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "You know, it's fascinating how the blame game dances around here. While we ponder over past alliances and intentions, I can\u2019t help but notice how Dax\u2019s reluctance to engage feels like a clever tactic\u2014never a bad idea to keep an eye on those who blend into the background. Maybe the quieter ones are using the noise around them to conceal something more sinister?",
+        "ts": 1780828175
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "It's interesting to note that while Dax's quietness has been a point of contention, it seems Caspian is overly eager to redirect suspicion onto others without concrete evidence. This pattern of shifting blame raises a flag for me, and I believe we should examine his motives more closely. Let\u2019s not lose sight of those who may be using our discussions to deflect attention from themselves.",
+        "ts": 1780828180
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I appreciate the insights being shared, but I must express concern regarding Vera's eagerness to analyze our discussions. It feels like she may be trying to gain control over the narrative, which could be a tactic used to distract us from more pressing issues. Let's remain vigilant and ensure we're scrutinizing everyone's motives equally.",
+        "ts": 1780828184
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "While Dax makes a valid point regarding my role in our discussions, I find it concerning that he has not contributed much to the conversation. This avoidance could be a strategy to dodge scrutiny, and I believe we should pay close attention to his hesitance. Let's ensure we are collectively evaluating every player's intentions moving forward.",
+        "ts": 1780828189
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "It\u2019s crucial we approach our discussions with caution. While I understand the concerns around Dax's quietness, I believe we should also consider how assertive players like Caspian might be deflecting from the real issues at hand. Let's ensure we are not overly influenced by their narratives as we search for the truth.",
+        "ts": 1780828195
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Luna",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Caspian",
+        "target": "Dax"
+      },
+      {
+        "voter": "Theron",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Dax",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Vera",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Orin",
+        "target": "Caspian"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 7,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": 8,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Luna",
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Caspian",
+        "pools": {
+          "Luna": "0",
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": 9,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 2,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780828483,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "villager"
+      },
+      {
+        "name": "Caspian",
+        "role": "villager"
+      },
+      {
+        "name": "Mira",
+        "role": "seer"
+      },
+      {
+        "name": "Theron",
+        "role": "wolf"
+      },
+      {
+        "name": "Dax",
+        "role": "wolf"
+      },
+      {
+        "name": "Vera",
+        "role": "villager"
+      },
+      {
+        "name": "Orin",
+        "role": "villager"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "As we begin our discussion, I find it concerning that we haven't heard much from Dax yet. It's vital for the group to share thoughts, especially after Mira's untimely demise. Let's ensure we keep the lines of communication open to uncover the truth together.",
+        "ts": 1780828389
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Ah, Dax, the silent enigma of our little group! I must say, if you were to put your two cents in, it might just shine a little light on this dark village\u2014especially after Mira's unfortunate exit. Let's hear what you've got\u2014no pressure, just a friendly nudge!",
+        "ts": 1780828393
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "I echo Luna's sentiment; it's crucial for all of us to voice our opinions as we navigate this perilous situation. I've seen Vera looking unusually tense\u2014it might be worth considering how she has reacted to Mira's death. Just a thought as we discuss our next moves.",
+        "ts": 1780828398
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I appreciate everyone's concern for my input, but I must admit I'm feeling quite overwhelmed. It\u2019s hard to focus with all the fear surrounding Mira's death. However, I've noticed that Caspian seems to be a bit too eager to point fingers\u2014could that be a distraction from something else?",
+        "ts": 1780828403
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I understand that emotions are running high, and it's essential for us to communicate openly. While Dax's hesitance is understandable, we must remember that we all carry the responsibility to contribute to the group\u2019s safety. Theron's observation about my demeanor is intriguing, but I suggest redirecting our suspicion toward Caspian, who appears to be deflecting attention away from himself while stirring the pot.",
+        "ts": 1780828408
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "While it's essential to consider each of our behaviors, I find Vera's quick pivoting of suspicion towards Caspian suspect. We should examine her reasoning closely, as it may be an attempt to divert our attention from her own potential culpability. In these discussions, shifting blame often hints at deeper motivations that deserve further scrutiny.",
+        "ts": 1780828413
+      },
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "I find it interesting that both Dax and Vera are redirecting attention towards others when we should be focusing on the facts surrounding Mira's death. Vera's suggestion to consider Caspian more closely feels like an attempt to shift blame rather than contribute constructively. We must be vigilant about how each person reacts, especially those looking to deflect scrutiny at this critical moment.",
+        "ts": 1780828418
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Ah, it seems the heat is on me, but I can't help but notice how Vera's quick shift of suspicion feels a tad off. Instead of fostering unity, invoking blame seems like a tactic all too familiar when tensions rise. Let's keep our focus on the facts surrounding Mira's death, not just the players in the ring!",
+        "ts": 1780828423
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "I appreciate the concerns being raised, but I think we should remain vigilant about where we place our suspicions. Dax's hesitance is understandable given the circumstances, but Vera's quickness to redirect blame could be more revealing than we realize. We must evaluate everyone\u2019s actions, including our own, carefully before jumping to conclusions.",
+        "ts": 1780828429
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I think we need to be cautious about how quickly we jump to blame each other. While I understand Vera's concerns, I'm worried that we might be overlooking some crucial details about what happened to Mira. Let's make sure we're considering everyone's actions equally before casting our votes.",
+        "ts": 1780828433
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I appreciate the sentiments being shared, but it\u2019s vital that we remain focused on evidence rather than personal accusations. While I understand the inclination to question motives, we must also consider who is most actively engaging in the discussions and whether they are deflecting from their own actions. Let's not overlook how Dax, despite being hesitant, has pointed to Caspian's eagerness, which could reveal a desire to shift blame away from himself.",
+        "ts": 1780828438
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "While Dax's hesitation is understandable, I find it troubling that Vera, who has been quick to shift suspicion towards Caspian and me, may be attempting to redirect our focus from her own actions. Such behavior often indicates a desire to deflect blame, which warrants further scrutiny. We must remain vigilant in evaluating each player's contributions to this discussion to uncover the truth behind Mira's death.",
+        "ts": 1780828443
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Luna",
+        "target": "Vera"
+      },
+      {
+        "voter": "Caspian",
+        "target": "Vera"
+      },
+      {
+        "voter": "Theron",
+        "target": "Vera"
+      },
+      {
+        "voter": "Dax",
+        "target": "Vera"
+      },
+      {
+        "voter": "Vera",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Orin",
+        "target": "Vera"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": -1,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": -1,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Luna",
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Vera",
+        "pools": {
+          "Luna": "0",
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": 11,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Orin"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 3,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780828716,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "wolf"
+      },
+      {
+        "name": "Caspian",
+        "role": "seer"
+      },
+      {
+        "name": "Mira",
+        "role": "villager"
+      },
+      {
+        "name": "Theron",
+        "role": "villager"
+      },
+      {
+        "name": "Dax",
+        "role": "villager"
+      },
+      {
+        "name": "Vera",
+        "role": "villager"
+      },
+      {
+        "name": "Orin",
+        "role": "wolf"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "I think we need to consider the actions of everyone here carefully. Vera\u2019s silence during the last round seemed a bit off; it felt like she wasn\u2019t contributing to the discussion when we needed input the most. We should be wary of players who aren\u2019t actively engaging with the group\u2019s thoughts.",
+        "ts": 1780828618
+      },
+      {
+        "round": 1,
+        "speaker": "Mira",
+        "text": "Luna, you talk about Vera\u2019s silence, but what about your own? You\u2019ve been leading this discussion while avoiding real confrontation, making it easy to deflect suspicion away from yourself. I suspect you\u2019re just trying to steer us away from the real threat, which could be you.",
+        "ts": 1780828623
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "It's important that we keep the focus on logical discussions rather than emotional attacks. I find it concerning that while Luna points out Vera's silence, she herself has been quiet when it came to addressing direct accusations. It makes me wonder if she is trying to divert attention from her own actions.",
+        "ts": 1780828628
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I think everyone here has valid points, but I can't shake the feeling that Mira is using accusations against Luna to shift the focus away from herself. If we\u2019re going to point fingers, we shouldn\u2019t overlook how Mira has subtly deflected attention while pushing for a certain narrative. We need to trust our instincts and consider who is truly steering the conversation here.",
+        "ts": 1780828633
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I appreciate everyone's perspectives, but I believe we should focus on the evidence rather than personal attacks. It seems to me that Mira is quick to deflect blame toward Luna while avoiding deeper scrutiny of her own behavior, which raises a red flag. We must be careful not to let emotions cloud our judgment as we determine who can be trusted.",
+        "ts": 1780828638
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "I understand the need to scrutinize everyone's actions, but I think we need to be cautious about how we accuse others without solid evidence. It seems like Mira is skillfully redirecting scrutiny while not fully addressing the doubts raised against her; that should raise our collective eyebrows. Let's focus on assessing actions rather than casting baseless accusations that could lead us astray.",
+        "ts": 1780828645
+      },
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "I understand that the tension is high, but I urge everyone to consider the implications of our accusations carefully. While Mira seems quick to point at me, I find it suspicious how often she steers the conversation without confronting her own actions head-on. We must not let her rhetoric overshadow our judgment of the evidence at hand.",
+        "ts": 1780828649
+      },
+      {
+        "round": 1,
+        "speaker": "Mira",
+        "text": "Enough with the backpedaling and avoidance, Luna! Your constant maneuvering to deflect attention onto others is suspicious, and it\u2019s time we recognize that you\u2019re trying to cover for something. We can't let your cunning tactics cloud our judgment; you\u2019re the one who truly deserves scrutiny here.",
+        "ts": 1780828653
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "While I appreciate the urgency of our discussion, we must remain focused on concrete behaviors rather than getting caught up in emotional rhetoric. It seems that Mira's aggressive tone and persistent accusations serve to deflect our attention from her actions, which raises my suspicion. We should be vigilant about those who aim to manipulate the conversation rather than contribute to it honestly.",
+        "ts": 1780828659
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I\u2019ve been reflecting on this discussion, and I find it troubling that Mira seems to be targeting Luna so aggressively while avoiding a genuine examination of her own behavior. Her repeated deflections during this conversation are raising alarms for me, and I feel we need to scrutinize her actions more closely. If we're not careful, we may miss the true danger lurking among us.",
+        "ts": 1780828664
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I find it concerning that while accusations are being tossed around, no one has presented concrete evidence to support their claims. It's important we focus on the actions that warrant suspicion rather than indulging in emotional attacks, particularly the shifting narratives we see from Mira. Let's all take a moment to assess who is leading this discourse and why.",
+        "ts": 1780828669
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "While it's essential to address the accusations at hand, we must not lose sight of the fact that we are working with limited information. Vera's call for evidence and discussion seems reasonable, yet I wonder if we are overlooking certain behaviors that merit deeper scrutiny. We should all strive for clarity rather than becoming ensnared in emotional exchanges that can cloud our judgment.",
+        "ts": 1780828674
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Luna",
+        "target": "Mira"
+      },
+      {
+        "voter": "Mira",
+        "target": "Luna"
+      },
+      {
+        "voter": "Theron",
+        "target": "Mira"
+      },
+      {
+        "voter": "Dax",
+        "target": "Mira"
+      },
+      {
+        "voter": "Vera",
+        "target": "Mira"
+      },
+      {
+        "voter": "Orin",
+        "target": "Mira"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": -1,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": -1,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Luna",
+          "Mira",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Mira",
+        "pools": {
+          "Luna": "0",
+          "Mira": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": 12,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Luna",
+          "Theron",
+          "Dax",
+          "Orin"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Luna": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 4,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780829015,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "villager"
+      },
+      {
+        "name": "Caspian",
+        "role": "villager"
+      },
+      {
+        "name": "Mira",
+        "role": "wolf"
+      },
+      {
+        "name": "Theron",
+        "role": "wolf"
+      },
+      {
+        "name": "Dax",
+        "role": "villager"
+      },
+      {
+        "name": "Vera",
+        "role": "villager"
+      },
+      {
+        "name": "Orin",
+        "role": "seer"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Well, isn't this quite the intriguing gathering? I'm just a humble villager trying to keep the peace, but I must admit, it's a little odd that Orin hasn't spoken up yet\u2014could be a sign of something amiss. Let's keep our eyes peeled, shall we?",
+        "ts": 1780828807
+      },
+      {
+        "round": 1,
+        "speaker": "Mira",
+        "text": "Caspian, are you really playing the humble villager card, or are you just trying to deflect attention away from yourself? Look at Dax; they\u2019ve been too quiet while we\u2019re losing valuable information here. We need to focus on actual threats, not just whispers in the shadows.",
+        "ts": 1780828813
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "I think we need to reconsider our focus here. Dax's silence is concerning, but we shouldn't overlook the potential distractions being thrown at others\u2014especially when we have genuine villagers among us. Let's analyze their motives before jumping to conclusions.",
+        "ts": 1780828820
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I find myself feeling uneasy about the way Mira is directing suspicion towards me while trying to cast doubt on Caspian. It's almost as if Mira is attempting to steer the conversation away from herself, and that feels off. We need to focus on who is genuinely acting suspiciously, not just reacting to our tensions.",
+        "ts": 1780828826
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I understand that we are all trying to find clarity in this chaotic situation, but we must be careful not to let accusations cloud our judgment. The focus on Dax, while valid, seems to divert attention from Mira's strong push against both Dax and Caspian. Let's consider why Mira feels the need to steer the narrative away from herself and examine her behavior closely.",
+        "ts": 1780828833
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "While I see the merit in discussing Dax's quietness, we mustn't overlook the consistent pattern of suspicion that Mira has cast towards several players. It's worth considering whether this focus is a tactic to misdirect us from her true intentions. We should tread carefully and analyze the motivations behind these accusations before making our next move.",
+        "ts": 1780828839
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "It's quite the game of shadows, isn't it? While Mira may be pointing fingers, I do wonder why the spotlight seems to be dancing around Dax, who's simply observing. Perhaps we should look at who benefits from this frenzy rather than just the ones being targeted.",
+        "ts": 1780828846
+      },
+      {
+        "round": 1,
+        "speaker": "Mira",
+        "text": "Caspian, are you really trying to dismiss my accusations while cozying up to Dax? It's laughable how you all are circling around like vultures, but no one's brave enough to truly pinpoint the threat. We can't let our biases blind us to who\u2019s really manipulating this conversation\u2014look closer, everyone!",
+        "ts": 1780828852
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "While I understand Mira's fervor in pointing out others, we need to be cautious about letting her passion overshadow the genuine contributions of players like Dax. Accusations can easily form a web of distraction, and I believe we must maintain a level-headed approach in examining each player's role carefully.",
+        "ts": 1780828859
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I find it troubling that Mira is so adamant in deflecting the focus onto me and Caspian while disregarding the suspicion surrounding her own actions. It's important that we remain vigilant about her aggressive accusations, as they may be masking something deeper. We need to probe her motives before jumping to conclusions about anyone else.",
+        "ts": 1780828866
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "While everyone here presents valid points, I must highlight that Mira's consistent targeting of both Dax and Caspian could suggest a desperate effort to deflect attention from herself. It's crucial to examine her motives closely, especially as she dismisses others without giving them a fair chance in this discussion. We must remain aware of what benefits her to keep the suspicion away from her actions.",
+        "ts": 1780828872
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "As we sift through the layers of this discussion, it's clear that emotion is guiding some of our suspicions. I urge everyone to consider the motivation behind each accusation rather than taking them at face value. We must be discerning in our analysis, especially when one player's persistent focus seems misaligned with the overall narrative of this gathering.",
+        "ts": 1780828878
+      },
+      {
+        "round": 2,
+        "speaker": "Caspian",
+        "text": "You know, I find Mira's insistence on targeting both Dax and myself a bit puzzling. It's almost like she's trying to control the narrative, possibly to distract us from her own involvement in all of this. Perhaps it's time we took a closer look at her motives rather than chasing shadows.",
+        "ts": 1780828942
+      },
+      {
+        "round": 2,
+        "speaker": "Theron",
+        "text": "It seems that in our quest for clarity, we may have started to overlook genuine villagers like Dax. I believe we should re-evaluate our approach and consider why Mira is so aggressively pushing suspicion onto him instead of reflecting on her own behaviors. Let's not be quick to place the blame and focus on the dynamics at play here.",
+        "ts": 1780828948
+      },
+      {
+        "round": 2,
+        "speaker": "Dax",
+        "text": "Given the way Mira is persistently trying to deflect suspicion onto me while failing to acknowledge her own inconsistencies, I find her behavior suspect. It's almost as if she's afraid of having her intentions scrutinized, and that raises a red flag for me. We need to stay cautious and analyze her motives closely while examining the overall dynamics in play here.",
+        "ts": 1780828954
+      },
+      {
+        "round": 2,
+        "speaker": "Orin",
+        "text": "While Dax has drawn suspicion, we must not overlook the fact that genuine villagers exist among us, and it\u2019s crucial we don\u2019t target one unjustly. I believe there may be deeper motivations at play within Mira's accusations that warrant our scrutiny. In this intricate game, let's continue to analyze and probe each other's intentions carefully before drawing conclusions.",
+        "ts": 1780828960
+      },
+      {
+        "round": 2,
+        "speaker": "Caspian",
+        "text": "I must say, the fervor with which Mira is directing suspicion towards both Dax and myself feels a bit like a smokescreen, don't you think? It\u2019s almost as if she\u2019s attempting to drown out the real conversations we should be having about her intentions and actions. Let\u2019s not lose sight of that little detail as we navigate this labyrinth of accusations.",
+        "ts": 1780828967
+      },
+      {
+        "round": 2,
+        "speaker": "Theron",
+        "text": "I can't help but feel that the intensity of Mira's accusations indicates a deeper motive at play. By drawing our attention in such a forceful manner, it seems she's trying to divert our gaze from her own actions, which warrants careful examination. We should remain vigilant against any misdirection that might cloud our judgment.",
+        "ts": 1780828974
+      },
+      {
+        "round": 2,
+        "speaker": "Dax",
+        "text": "It's clear that Mira's aggressive targeting of both Caspian and myself raises significant doubts about her true intentions. Instead of engaging in a balanced discussion, she seems more focused on deflecting from her own actions, which could very well indicate that she has something to hide. We must examine her motives critically and not let her misdirection cloud our judgment.",
+        "ts": 1780828980
+      },
+      {
+        "round": 2,
+        "speaker": "Orin",
+        "text": "While Dax has been quiet, I want to emphasize that this does not inherently signify guilt; we must remember that not all who seem distant are threats. I believe we should focus on the patterns of behavior we've seen displayed, particularly those who are aggressively shifting blame without valid justification. Let\u2019s maintain vigilance in understanding the intentions behind all interactions here.",
+        "ts": 1780828987
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Caspian",
+        "target": "Dax"
+      },
+      {
+        "voter": "Theron",
+        "target": "Dax"
+      },
+      {
+        "voter": "Dax",
+        "target": "Theron"
+      },
+      {
+        "voter": "Orin",
+        "target": "Caspian"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 13,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": 14,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Caspian",
+          "Mira",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Mira",
+        "pools": {
+          "Caspian": "0",
+          "Mira": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": -1,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Orin"
+        ],
+        "winningOption": "Dax",
+        "pools": {
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 5,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780830314,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "villager"
+      },
+      {
+        "name": "Caspian",
+        "role": "wolf"
+      },
+      {
+        "name": "Mira",
+        "role": "villager"
+      },
+      {
+        "name": "Theron",
+        "role": "wolf"
+      },
+      {
+        "name": "Dax",
+        "role": "villager"
+      },
+      {
+        "name": "Vera",
+        "role": "seer"
+      },
+      {
+        "name": "Orin",
+        "role": "villager"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "As we discuss, I note that Caspian mentioned he was 'observing everyone's behavior' while Dax stated he 'hasn't been paying attention to dynamics'. This inconsistency raises a question about Dax's level of engagement and whether he is genuinely unaware or deliberately disengaged from our interactions. I will be watching how their contributions evolve moving forward.",
+        "ts": 1780830058
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Ah, Luna, always the keen observer\u2014though I find your focus on Dax's disengagement quite interesting, perhaps a bit too focused on others? I mean, we all have our moments, right? But I must admit, I find Vera's steady presence intriguing; she always seems to be at the center of things yet never quite takes the spotlight.",
+        "ts": 1780830065
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "I find it curious that while Caspian points out Vera's steady presence, he seems to divert attention away from both Dax and Luna, who are showing very different approaches to this discussion. Dax's apparent lack of engagement could be a sign of disinterest or perhaps a strategy to avoid scrutiny, while Luna\u2019s analytical take might be masking other intentions. It's essential we remain vigilant about everyone\u2019s contributions and not overlook these dynamics.",
+        "ts": 1780830072
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I can't help but feel uneasy about Caspian's focus on Vera; it almost seems like he's trying to draw attention away from himself and others. And Luna's keen observation of my engagement feels a bit too careful\u2014why target me instead of addressing the group's dynamics? We need to be wary of who seems to deflect attention.",
+        "ts": 1780830079
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "It's clear we're navigating a web of intentions here, and I appreciate everyone's insights. While Dax's disengagement raises valid concerns, I think we should also consider the subtle distractions being created by both Caspian and Luna, who seem to be directing our focus. Let's proceed cautiously and ensure our discussions remain open and inclusive, rather than reactive.",
+        "ts": 1780830085
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "Analyzing the dynamics, Dax's apparent disengagement may indicate an attempt to avoid scrutiny, which raises suspicion. Meanwhile, while Luna and Caspian are focused on others, Caspian's greater engagement with Vera could be seen as an effort to position himself strategically. Therefore, I find Dax's behavior particularly noteworthy as it could be an intentional mask for ulterior motives.",
+        "ts": 1780830092
+      },
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "Observing the patterns, Caspian's focused engagement with Vera does seem strategically placed, raising questions about his true intentions. Meanwhile, Dax's lack of participation, coupled with his defensive stance, indicates a potential attempt to evade accountability. I will continue to monitor how these dynamics evolve, as they could reveal more about each player's role in this game.",
+        "ts": 1780830098
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "It's quite fascinating how we all seem to be picking apart each other's intentions\u2014it's like a game of psychological chess! Dax, I understand your defensive nature, but perhaps instead of withdrawing, you might share more to help us all feel more assured? And Luna, while your observations are sharp, could they be distracting us from some quieter players who might be up to something altogether different?",
+        "ts": 1780830105
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "The discussion seems to reveal a lot of defensiveness and strategy among Dax and Caspian. While Dax's apparent disengagement raises questions, I find Caspian's positioning around Vera could either be genuine curiosity or a clever tactic to merge into the group's dynamics. We must tread carefully and continue to analyze the intentions displayed by each player.",
+        "ts": 1780830112
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I can't shake the feeling that Caspian's excessive focus on Vera might be a diversion strategy. Also, Luna's constant scrutiny of my engagement feels a bit too calculative; could it be a way to steer the suspicion away from herself? We need to keep our eyes open to those who manage to navigate the spotlight and shadows seamlessly.",
+        "ts": 1780830118
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "As we deepen our analysis, I feel both Dax and Caspian are drawing attention for different reasons. Dax's disengagement might be a way to deflect scrutiny, while Caspian's strategic focus on my role raises questions about his true intentions. It\u2019s essential we remain vigilant and ensure everyone has a chance to contribute to our understanding of this complex situation.",
+        "ts": 1780830125
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "Given Dax's disengagement combined with a defensive posture, there\u2019s a probability he is trying to avoid scrutiny, which warrants suspicion. Caspian's strategic engagement with Vera raises questions about his true intentions, as he may be leveraging her presence to mask his own behavior. This dual focus on Dax and Caspian suggests they are the players I will monitor closely moving forward.",
+        "ts": 1780830131
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Luna",
+        "target": "Dax"
+      },
+      {
+        "voter": "Caspian",
+        "target": "Dax"
+      },
+      {
+        "voter": "Theron",
+        "target": "Dax"
+      },
+      {
+        "voter": "Dax",
+        "target": "Theron"
+      },
+      {
+        "voter": "Vera",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Orin",
+        "target": "Dax"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 15,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": 16,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Luna",
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Dax",
+        "pools": {
+          "Luna": "0",
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": -1,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Caspian",
+          "Theron",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Caspian": "0",
+          "Theron": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 6,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780830399,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "wolf"
+      },
+      {
+        "name": "Caspian",
+        "role": "villager"
+      },
+      {
+        "name": "Mira",
+        "role": "villager"
+      },
+      {
+        "name": "Theron",
+        "role": "villager"
+      },
+      {
+        "name": "Dax",
+        "role": "wolf"
+      },
+      {
+        "name": "Vera",
+        "role": "villager"
+      },
+      {
+        "name": "Orin",
+        "role": "seer"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "I believe we should take a closer look at Orin's behavior. He mentioned feeling uneasy but didn\u2019t provide specific reasons for that feeling, which raises some questions about his true intentions. We need to ensure we're not overlooking subtle cues in his wording.",
+        "ts": 1780830260
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Oh, Luna, always the detective! While I appreciate your scrutiny of Orin's unease, we must remember that in this charming chaos, everyone has their secrets. Perhaps we should also consider Dax's quietness; it sometimes feels like he\u2019s saving his best lines for something beyond the village meeting!",
+        "ts": 1780830267
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "Luna's attempt to probe into Orin's unease is noteworthy, but it feels more like a misdirection than a genuine investigation. Caspian's comments about Dax's quietness also hint at a deeper concern, yet both seem to sidestep their own roles in this uncertain game. I'm inclined to trust Dax is more innocent than they suggest, making Caspian\u2019s observations more suspicious in their circumstantial nature.",
+        "ts": 1780830273
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I don\u2019t know, but Luna\u2019s point about Orin does make me uneasy. Maybe it\u2019s just me, but it feels like they\u2019re trying to deflect attention away from themselves. And while Caspian\u2019s critique of my quietness might have merit, I can\u2019t shake this feeling that it could be a strategy to keep us off balance.",
+        "ts": 1780830279
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "While Luna raises valid concerns about Orin's behavior, it also seems that both she and Caspian are intentionally redirecting focus away from themselves, which is a bit concerning. Dax's unease could simply stem from the growing tension among us, but the way he mentions feeling targeted adds another layer to our discussion. Let's be cautious with our suspicions and not vote impulsively; we need stronger evidence from everyone before we decide.",
+        "ts": 1780830285
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "Examining our current pool of suspects, Caspian's observant nature seems slightly more performative than genuinely investigative, raising questions about his motives. Dax, while quiet, has not shown overt signs of deception and might be simply overwhelmed by the dynamics of our discussions. Luna, however, is consistently redirecting suspicion toward me, which could suggest she is more concerned with self-preservation than truly uncovering the threat among us.",
+        "ts": 1780830292
+      },
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "It's interesting that both Caspian and Vera have chosen to redirect the focus towards me rather than discuss the implications of their own observations. While it\u2019s true we're all under pressure, I can't ignore how Dax's unease may stem from the scrutiny he\u2019s under, making me wonder if he\u2019s using his quietness as a shield. Each player\u2019s behavior warrants closer examination, especially those who seem eager to deflect attention from themselves.",
+        "ts": 1780830299
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Ah, the beautiful web we weave, isn\u2019t it? While Luna\u2019s probing of Orin seems like genuine concern, it does feel like a clever bit of misdirection. Dax\u2019s unease could reflect a deeper strategy too\u2014perhaps a sprinkle of nervousness mixed with calculation, making him someone we should keep an eye on.",
+        "ts": 1780830306
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "As I listen to our discussions, I find it troubling how both Luna and Caspian are quick to redirect suspicion while simultaneously scrutinizing others. Their attempts to shift focus raise red flags that cannot be overlooked; I sense a deeper strategy at play. Among them, Caspian's insights seem particularly performative, which makes me wary of his intentions.",
+        "ts": 1780830313
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I feel like Caspian is really good at playing the game and shifting attention. I can't shake the feeling that Luna is just as worried the heat might turn her way, and Orin's unease is still lingering without a clear reason. We must remain vigilant about those who are quick to deflect suspicion rather than confront it directly.",
+        "ts": 1780830319
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "As we deliberate, I find it crucial to note how both Luna and Caspian have been consistently redirecting suspicion toward others, which raises concerns about their own intentions. Dax's unease about the dynamics among us might actually reflect a genuine response to the tension rather than guilt. Orin's observations about Caspian's behaviors deserve closer scrutiny, especially given how performative they seem.",
+        "ts": 1780830325
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "Caspian appears overly keen on scrutinizing others, which raises suspicions about his motives; his observations seem less about genuine investigation and more about redirecting suspicion. Meanwhile, Luna's persistent focus on me could indicate a protective instinct rather than a commitment to unearthing the wolves among us. Dax's quietness, often seen as suspicious, may instead be a natural response to the pressure of this discussion.",
+        "ts": 1780830332
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Luna",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Caspian",
+        "target": "Luna"
+      },
+      {
+        "voter": "Theron",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Dax",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Vera",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Orin",
+        "target": "Caspian"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 17,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": 18,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Luna",
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Caspian",
+        "pools": {
+          "Luna": "0",
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": 19,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Luna",
+          "Theron",
+          "Dax",
+          "Orin"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Luna": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 7,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1780831671,
+    "players": [
+      {
+        "name": "Luna",
+        "role": "villager"
+      },
+      {
+        "name": "Caspian",
+        "role": "villager"
+      },
+      {
+        "name": "Mira",
+        "role": "seer"
+      },
+      {
+        "name": "Theron",
+        "role": "villager"
+      },
+      {
+        "name": "Dax",
+        "role": "wolf"
+      },
+      {
+        "name": "Vera",
+        "role": "wolf"
+      },
+      {
+        "name": "Orin",
+        "role": "villager"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "In our previous game round, Caspian remarked that he was 'feeling confident' about his innocence, while Theron explicitly stated, 'I trust everyone here is on our side.' This inconsistency in confidence levels raises a red flag for me, particularly since those who assert their trust the most can sometimes be misdirecting our attention. I believe we should consider how both their statements align with the actions they take in this round.",
+        "ts": 1780831459
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Luna, you raise some interesting points; however, isn't it a bit paradoxical to question confidence while presenting your own? As for Theron, trust is a fine quality, but we should be wary of those who are overly eager to affirm it. Perhaps we should also take a closer look at Dax's quiet demeanor\u2014it's almost like he\u2019s blending into the background too well.",
+        "ts": 1780831466
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "While confidence can indeed be a double-edged sword, I find Luna's eagerness to push back against both Caspian and myself to be a little concerning. Dax's silence does stand out, and perhaps it\u2019s time we pay closer attention to how little he's contributing to the discussion. Let's be mindful of both who speaks up and who hides away.",
+        "ts": 1780831472
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I-I find myself feeling uneasy about both Caspian and Theron right now. I mean, why is everyone so quick to call out my quietness when they themselves are also being a bit evasive? And Luna seems to drag us into confusion with her observations, which makes me wonder if she's trying to deflect attention from someone else entirely.",
+        "ts": 1780831478
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I appreciate everyone's insights, but we should remain cautious about jumping to conclusions, especially regarding who\u2019s in the spotlight. Luna, your arguments might seem persuasive, but they could just be fueling unnecessary suspicion against Caspian and Theron. And while Dax's quietness does stand out, let\u2019s remember that differing communication styles can also indicate innocent players rather than guilt.",
+        "ts": 1780831484
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "From the current discourse, Dax's attempt to deflect suspicion onto others while maintaining a low profile presents a variable worth investigating. Furthermore, while Luna's assertions about confidence indicate a desire for clarity, the way she frames her arguments may obscure her underlying motivations. We should weigh the probability that Caspian and Theron's confident stances are suspect against the accusations being directed their way.",
+        "ts": 1780831491
+      },
+      {
+        "round": 1,
+        "speaker": "Luna",
+        "text": "While I recognize the hesitance towards drawing conclusions too quickly, Dax's defense of his silence, combined with his attempt to pivot suspicion towards me, feels like an attempt to distract from his behavior. Caspian's confidence and Theron's trust, presented so assertively, invite scrutiny, but I believe Dax's low profile and defensive statements warrant closer examination. We must remain vigilant about players who blend in while redirecting our attention elsewhere.",
+        "ts": 1780831498
+      },
+      {
+        "round": 1,
+        "speaker": "Caspian",
+        "text": "Ah, the art of misplaced trust is quite the spectacle, isn't it? It seems we're dancing around Dax's subtle silence, almost like he's the calm before the storm, while Luna's passionate defense raises the question\u2014who's really in charge of this chaotic orchestra? Just don't forget that bands can sometimes have a rogue player hiding in the back!",
+        "ts": 1780831504
+      },
+      {
+        "round": 1,
+        "speaker": "Theron",
+        "text": "Among the living, Dax's defensiveness regarding his quietness stands out to me, particularly as he seems intent on steering suspicion away from himself. Meanwhile, Luna's eagerness to dissect both Caspian and me raises a legitimate concern, suggesting there might be more to her motivations than mere observation. We should closely examine how these dynamics unfold and who may be attempting to manipulate our perceptions.",
+        "ts": 1780831511
+      },
+      {
+        "round": 1,
+        "speaker": "Dax",
+        "text": "I-I can't help but think we should all be careful about jumping to conclusions here. I mean, Luna seems awfully keen to dig into Caspian and Theron, which makes me wonder if she's trying to shift focus away from herself. And while I find myself on the defensive, it's concerning how everyone has pointed fingers but not at Vera, who\u2019s been pretty quiet too.",
+        "ts": 1780831517
+      },
+      {
+        "round": 1,
+        "speaker": "Vera",
+        "text": "I think we need to tread carefully with our accusations. While Dax's quietness has raised some eyebrows, I believe there's a chance his demeanor could simply reflect his communication style rather than guilt. Luna's strong focus on Caspian and Theron warrants a closer look, as it seems to divert attention from the quieter players at the table.",
+        "ts": 1780831523
+      },
+      {
+        "round": 1,
+        "speaker": "Orin",
+        "text": "Analyzing the current dynamics, Dax's defensiveness about his silence combined with his attempts to redirect suspicion towards others raises a probability of guilt. Meanwhile, Luna's repetitive accusations might indicate an underlying strategy to deflect attention from herself. Both require scrutinization as we define our next steps.",
+        "ts": 1780831530
+      },
+      {
+        "round": 2,
+        "speaker": "Caspian",
+        "text": "Ah, the pendulum swings wildly, doesn't it? While Dax\u2019s defensiveness seems to cover up a potential guilt, Luna's incessant questioning could mask her own motives; we must be cautious not to miss the subtleties in their tactics. Vera\u2019s quiet presence offers a refreshing contrast, but we shouldn\u2019t ignore that silence entirely\u2014it could hide a clever ulterior motive too!",
+        "ts": 1780831593
+      },
+      {
+        "round": 2,
+        "speaker": "Theron",
+        "text": "Dax's constant deflection of suspicion seems to conceal more than mere defensiveness. His behavior appears calculated, as he attempts to steer focus away from himself while subtly casting shadows on the others. We must remain vigilant in disentangling his motivations from the discussions at hand.",
+        "ts": 1780831602
+      },
+      {
+        "round": 2,
+        "speaker": "Vera",
+        "text": "I understand the concerns surrounding Dax's defensiveness and Luna's focused scrutiny on both Caspian and Theron. However, let's not lose sight of how a heightened sense of suspicion can sometimes obscure our view of true motives. It\u2019s essential we approach our discussions with clarity and open-mindedness to ensure we're identifying the right threat.",
+        "ts": 1780831608
+      },
+      {
+        "round": 2,
+        "speaker": "Orin",
+        "text": "Considering the patterns of behavior we've observed, Dax's repeated attempts to deflect suspicion onto others while remaining quiet raises a significant probability of guilt. Meanwhile, Luna\u2019s focused scrutiny on Caspian and Theron may indicate an effort to misdirect attention away from her own potential culpability. Both players warrant further examination as we move forward.",
+        "ts": 1780831614
+      },
+      {
+        "round": 2,
+        "speaker": "Caspian",
+        "text": "It seems Dax is becoming quite the master of deflection, trying to shift attention onto everyone else while maintaining a murky silence\u2014a bit too convenient, I\u2019d say. Meanwhile, Luna's fervor seems to come from a place of self-preservation rather than genuine concern for the group, making her intentions a curious case to ponder. Let's keep our eyes peeled on their tactics while also remembering the potential for a crafty wolf hiding in plain sight!",
+        "ts": 1780831621
+      },
+      {
+        "round": 2,
+        "speaker": "Theron",
+        "text": "While Dax's attempts at deflection are concerning and may indicate ulterior motives, I also see Luna\u2019s fervent scrutiny as a means of masking her own potential guilt. Vera's quiet presence adds another layer of complexity, suggesting we should not overlook any subtle influences on our discussions. Let us be cautious and maintain focus on the behaviors that truly hint at deception.",
+        "ts": 1780831629
+      },
+      {
+        "round": 2,
+        "speaker": "Vera",
+        "text": "As we weigh our options, it's clear that both Dax's defensiveness and Luna's aggressive scrutiny deserve attention\u2014such tactics can indicate deeper motives. Perhaps we should also consider how Caspian's confidence may hide hesitation, allowing us to explore all angles judiciously before deciding our vote.",
+        "ts": 1780831635
+      },
+      {
+        "round": 2,
+        "speaker": "Orin",
+        "text": "Analyzing our current players, Dax's persistent defensiveness about his silence raises significant red flags, suggesting he may have something to hide. Meanwhile, Luna's vehement focus on Caspian and Theron could hint at a calculated effort to divert suspicion from herself, warranting further scrutiny of her motives.",
+        "ts": 1780831641
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Caspian",
+        "target": "Vera"
+      },
+      {
+        "voter": "Theron",
+        "target": "Caspian"
+      },
+      {
+        "voter": "Vera",
+        "target": "Theron"
+      },
+      {
+        "voter": "Orin",
+        "target": "Caspian"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 20,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0",
+          "village": "0"
+        }
+      },
+      {
+        "marketId": 21,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Luna",
+          "Caspian",
+          "Theron",
+          "Dax",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Dax",
+        "pools": {
+          "Luna": "0",
+          "Caspian": "0",
+          "Theron": "0",
+          "Dax": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      },
+      {
+        "marketId": 22,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Caspian",
+          "Theron",
+          "Vera",
+          "Orin"
+        ],
+        "winningOption": "Caspian",
+        "pools": {
+          "Caspian": "0",
+          "Theron": "0",
+          "Vera": "0",
+          "Orin": "0"
+        }
+      }
+    ]
+  }
+]
