@@ -172,9 +172,15 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
   position: sticky; bottom: 0; background: rgba(8,12,28,.94); color: #e7ecf3;
   padding: 12px 20px; border-top: 1px solid #2a3a5e;
 }
-.bet-head { margin-bottom: 8px; font-weight: 700; }
+.bet-head { margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .bet-cta { color: var(--gold); animation: pulse 1.3s infinite; }
 .bet-locked { color: #94a3b8; }
+.bet-controls { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.amount { font-size: 12px; color: #cbd5e1; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.amount input { width: 72px; padding: 5px 8px; border-radius: 8px; border: 1px solid #475569; background: #0f1830; color: #e7ecf3; }
+.btn.connect { background: var(--gold); color: #1a1a2e; padding: 7px 12px; font-size: 13px; }
+.wallet-chip { background: #1e293b; border: 1px solid #475569; padding: 6px 12px; border-radius: 999px; font-size: 12px; }
+.bet-msg { margin: 4px 0 8px; font-size: 13px; color: var(--gold); }
 .markets-row { display: flex; gap: 16px; flex-wrap: wrap; }
 .market { background: rgba(255,255,255,.05); border: 1px solid #2a3a5e; border-radius: 12px; padding: 10px 12px; min-width: 220px; }
 .market.resolved { opacity: .7; }

@@ -6,12 +6,13 @@ Run:  uvicorn server:app --reload --port 8000   (from backend/)
 """
 from __future__ import annotations
 
+import time
 import threading
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from game import loop
+from game import loop, chain
 
 app = FastAPI(title="Pack Orchestrator")
 app.add_middleware(
@@ -23,6 +24,7 @@ app.add_middleware(
 
 _lock = threading.Lock()
 _thread: threading.Thread | None = None
+_last_pool_refresh = 0.0
 
 
 @app.get("/health")
@@ -52,6 +54,17 @@ def get_state(mode: str = "bettor"):
     s = loop.STATE
     if s is None:
         return {"phase": "idle", "players": [], "markets": [], "discussionLog": []}
+    # When betting is open on a live chain, refresh pools (throttled) so a bet
+    # just placed via MetaMask shows up in the odds within ~2s.
+    global _last_pool_refresh
+    if not chain.MOCK_CHAIN and s.betting_open:
+        now = time.time()
+        if now - _last_pool_refresh > 2.0:
+            _last_pool_refresh = now
+            try:
+                loop._refresh_pools(s)
+            except Exception:
+                pass
     return serialize(s, mode)
 
 

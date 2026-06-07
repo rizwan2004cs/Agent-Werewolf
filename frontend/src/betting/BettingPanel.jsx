@@ -1,4 +1,5 @@
-import { placeBet } from "../wallet";
+import { useState } from "react";
+import { connect, placeBet, currentAccount } from "../wallet";
 
 function odds(pools, opt) {
   const total = Object.values(pools || {}).reduce((a, b) => a + parseFloat(b || 0), 0);
@@ -8,7 +9,11 @@ function odds(pools, opt) {
 
 const TITLES = { game_winner: "Who wins the game?", who_voted_out: "Who gets voted out?" };
 
-function Market({ m, frozen }) {
+function short(a) {
+  return a ? a.slice(0, 6) + "…" + a.slice(-4) : "";
+}
+
+function Market({ m, frozen, amount, onBet, busy }) {
   const win = m.resolved ? m.winningOption : null;
   return (
     <div className={`market ${m.resolved ? "resolved" : ""}`}>
@@ -18,8 +23,8 @@ function Market({ m, frozen }) {
           <button
             key={opt}
             className={`bet-btn ${win === opt ? "won" : ""}`}
-            disabled={frozen || m.resolved}
-            onClick={() => placeBet(m.marketId, i).catch((e) => alert(e.message))}
+            disabled={frozen || m.resolved || busy}
+            onClick={() => onBet(m.marketId, i, opt)}
           >
             <span className="opt-name">{opt}</span>
             <span className="odds">{odds(m.pools, opt)}</span>
@@ -32,10 +37,36 @@ function Market({ m, frozen }) {
 }
 
 export default function BettingPanel({ state }) {
+  const [account, setAccount] = useState(currentAccount());
+  const [amount, setAmount] = useState("0.05");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState(null);
+
   if (!state || !state.markets?.length) return null;
   const frozen = !state.bettingOpen;
   const active = state.markets.filter((m) => !m.resolved);
   const settled = state.markets.filter((m) => m.resolved);
+
+  const onConnect = async () => {
+    try { setAccount(await connect()); setMsg(null); }
+    catch (e) { setMsg(e.message); }
+  };
+
+  const onBet = async (marketId, optionIdx, opt) => {
+    setMsg(null);
+    try {
+      if (!account) { setAccount(await connect()); }
+      setBusy(true);
+      setMsg(`Confirm ${amount} MON on “${opt}” in MetaMask…`);
+      const hash = await placeBet(marketId, optionIdx, amount);
+      setMsg(`✅ Bet placed! tx ${short(hash)}`);
+    } catch (e) {
+      setMsg("⚠ " + (e.shortMessage || e.message));
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div className="betting-bar">
       <div className="bet-head">
@@ -44,10 +75,26 @@ export default function BettingPanel({ state }) {
         ) : (
           <span className="bet-cta">💰 Place your bet!</span>
         )}
+        <span className="bet-controls">
+          <label className="amount">
+            Stake
+            <input
+              type="number" min="0.01" step="0.01" value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            MON
+          </label>
+          {account ? (
+            <span className="wallet-chip">🦊 {short(account)}</span>
+          ) : (
+            <button className="btn connect" onClick={onConnect}>🦊 Connect MetaMask</button>
+          )}
+        </span>
       </div>
+      {msg && <div className="bet-msg">{msg}</div>}
       <div className="markets-row">
-        {active.map((m) => <Market key={m.marketId} m={m} frozen={frozen} />)}
-        {settled.map((m) => <Market key={m.marketId} m={m} frozen />)}
+        {active.map((m) => <Market key={m.marketId} m={m} frozen={frozen} amount={amount} onBet={onBet} busy={busy} />)}
+        {settled.map((m) => <Market key={m.marketId} m={m} frozen amount={amount} onBet={onBet} busy={busy} />)}
       </div>
     </div>
   );
