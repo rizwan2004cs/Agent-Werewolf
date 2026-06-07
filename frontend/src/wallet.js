@@ -12,6 +12,16 @@ function eth() {
   return window.ethereum;
 }
 
+// Turn raw MetaMask errors into something a human can act on.
+function friendly(err) {
+  const m = (err && (err.message || String(err))) || "";
+  if (/context invalidated|Extension context/i.test(m))
+    return new Error("MetaMask was reloaded — refresh this page (F5), then try again.");
+  if (err && err.code === 4001) return new Error("Request rejected in MetaMask.");
+  if (/insufficient funds/i.test(m)) return new Error("Not enough MON on this account (chain 143).");
+  return err instanceof Error ? err : new Error(m);
+}
+
 // Switch MetaMask to the contract.dev Monad network, adding it if it's missing.
 export async function ensureChain() {
   const e = eth();
@@ -35,10 +45,14 @@ export async function ensureChain() {
 }
 
 export async function connect() {
-  const e = eth();
-  const accounts = await e.request({ method: "eth_requestAccounts" });
-  await ensureChain();
-  return accounts[0];
+  try {
+    const e = eth();
+    const accounts = await e.request({ method: "eth_requestAccounts" });
+    await ensureChain();
+    return accounts[0];
+  } catch (err) {
+    throw friendly(err);
+  }
 }
 
 export function currentAccount() {
@@ -54,10 +68,14 @@ async function getContract() {
 }
 
 export async function placeBet(marketId, optionIdx, amountMon = "0.05") {
-  const c = await getContract();
-  const tx = await c.placeBet(marketId, optionIdx, { value: parseEther(String(amountMon)) });
-  await tx.wait();
-  return tx.hash;
+  try {
+    const c = await getContract();
+    const tx = await c.placeBet(marketId, optionIdx, { value: parseEther(String(amountMon)) });
+    await tx.wait();
+    return tx.hash;
+  } catch (err) {
+    throw friendly(err);
+  }
 }
 
 export async function claimWinnings(marketId) {
