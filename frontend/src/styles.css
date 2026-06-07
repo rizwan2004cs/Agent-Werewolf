@@ -84,23 +84,27 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
 /* ---------------- characters (ring) ---------------- */
 .character { position: absolute; width: 104px; text-align: center; transition: all .45s ease; }
 .character.dead { opacity: .4; filter: grayscale(1); transform: translate(-50%,-50%) scale(.92) !important; }
-/* Generic player avatar — a person icon in a coloured disc (no image dependency) */
+/* Character avatar — an illustrated face on a coloured frame */
 .pavatar {
-  position: relative; width: 74px; height: 74px; margin: 0 auto; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), transparent 60%), var(--c);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 5px 14px rgba(0,0,0,.35), inset 0 -3px 8px rgba(0,0,0,.2);
+  position: relative; width: 86px; height: 86px; margin: 0 auto; border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, rgba(255,255,255,.45), transparent 62%), var(--c);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  border: 3px solid rgba(255,255,255,.9);
+  box-shadow: 0 6px 18px rgba(0,0,0,.4), inset 0 -4px 10px rgba(0,0,0,.18);
 }
-.pavatar-icon { width: 46px; height: 46px; fill: rgba(255,255,255,.95); }
+.pavatar-img { width: 100%; height: 100%; object-fit: cover; }
+.pavatar-icon { width: 50px; height: 50px; fill: rgba(255,255,255,.95); }
 .character.speaking .pavatar {
-  box-shadow: 0 0 0 4px var(--gold), 0 0 24px var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px var(--gold), 0 0 28px var(--gold);
   animation: bob .55s ease-in-out infinite alternate;
 }
-.tombstone { position: absolute; bottom: -4px; right: -6px; font-size: 22px; }
-.nameplate { margin-top: 7px; font-weight: 800; font-size: 14px; }
+.tombstone { position: absolute; bottom: -2px; right: -4px; font-size: 26px; z-index: 2; }
+.nameplate { margin-top: 8px; font-weight: 800; font-size: 14px; letter-spacing: .3px; text-shadow: 0 1px 6px rgba(0,0,0,.45); }
 .role-tag {
-  display: inline-block; margin-top: 3px; font-size: 11px; font-weight: 700;
-  text-transform: capitalize; padding: 2px 9px; border-radius: 999px; background: #fff;
+  display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 800;
+  text-transform: capitalize; padding: 3px 10px; border-radius: 999px;
+  background: #fff; color: #1a1a2e; box-shadow: 0 3px 8px rgba(0,0,0,.25);
 }
 .role-tag.wolf { color: #fff; background: var(--wolf); }
 .role-tag.seer { color: #fff; background: var(--seer); }
