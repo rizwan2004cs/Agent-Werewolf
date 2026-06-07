@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchState, startGame } from "./api";
 import TopBar from "./scene/TopBar";
 import VillageScene from "./scene/VillageScene";
+import DiscussionFeed from "./scene/DiscussionFeed";
 import ReasoningPanel from "./scene/ReasoningPanel";
 import GameOverOverlay from "./scene/GameOverOverlay";
 import BettingPanel from "./betting/BettingPanel";
@@ -36,6 +37,7 @@ export default function App() {
   const phase = state?.phase ?? "idle";
   const isNight = phase === "night" || phase === "setup";
   const godMode = mode === "god";
+  const playing = phase !== "idle";
 
   return (
     <div className={`app ${isNight ? "night" : "day"} ${mode}`}>
@@ -47,14 +49,20 @@ export default function App() {
       />
       {err && <div className="err-banner">⚠ Can't reach backend ({err}). Is uvicorn running on :8000?</div>}
 
-      <div className="stage">
-        <VillageScene state={state} godMode={godMode} />
-        {isNight && phase !== "idle" && <div className="night-toast">🌙 The village sleeps…</div>}
+      <div className="main">
+        <div className="stage">
+          <VillageScene state={state} godMode={godMode} />
+          {isNight && playing && <div className="night-toast">🌙 The village sleeps…</div>}
+        </div>
+        {playing && (
+          <aside className="sidebar">
+            <DiscussionFeed log={state?.discussionLog} players={state?.players} />
+            {godMode && <ReasoningPanel reasoning={state?.privateReasoning} players={state?.players} />}
+          </aside>
+        )}
       </div>
 
-      {godMode && phase !== "idle" && <ReasoningPanel reasoning={state?.privateReasoning} />}
       {!godMode && <BettingPanel state={state} />}
-
       <GameOverOverlay state={state} onNewGame={onStart} />
     </div>
   );

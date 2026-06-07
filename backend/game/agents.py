@@ -148,9 +148,11 @@ def night_seer_pick(state):
     seer = next((p for p in state.alive_players() if p.role == "seer"), None)
     if not seer:
         return None, None
-    targets = [p for p in state.alive_players() if p.idx != seer.idx]
-    if not targets:
+    others = [p for p in state.alive_players() if p.idx != seer.idx]
+    if not others:
         return seer, None
+    known = set(getattr(state, "seer_known", {}).keys())
+    targets = [p for p in others if p.name not in known] or others
     if _USE_MOCK:
         return seer, random.choice(targets)
     raw = call_llm(prompts.seer_night(seer, targets), max_tokens=40)

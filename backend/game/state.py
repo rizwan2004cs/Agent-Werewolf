@@ -82,6 +82,7 @@ class GameState:
     betting_open: bool = True
     markets: list[Market] = field(default_factory=list)
     winner: str | None = None       # "wolves" | "village"
+    seer_known: dict[str, str] = field(default_factory=dict)   # name -> role, accumulates each night
 
     # --- helpers -----------------------------------------------------------
     def alive_players(self) -> list[Player]:

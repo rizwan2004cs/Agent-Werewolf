@@ -94,10 +94,8 @@ def night_phase(state):
     seer, target = agents.night_seer_pick(state)
     if seer and target:
         verdict = "a WOLF!" if target.role == ROLE_WOLF else "not a wolf"
-        state._seer_knowledge = {"name": target.name, "role": target.role}
+        state.seer_known[target.name] = target.role   # accumulates across nights
         _reason(state, seer.name, "seer", f"(night) I checked {target.name} — {verdict}")
-    else:
-        state._seer_knowledge = None
 
     state._pending_kill = victim
 
@@ -129,7 +127,7 @@ def discussion_phase(state):
     for _ in range(DISCUSSION_SUBROUNDS):
         for p in state.alive_players():
             state.speaking_idx = p.idx
-            sk = getattr(state, "_seer_knowledge", None) if p.role == ROLE_SEER else None
+            sk = state.seer_known if p.role == ROLE_SEER else None
             speech, thought = agents.speak(p, state, sk)
             p.current_speech = speech
             state.discussion_log.append({
@@ -148,7 +146,7 @@ def voting_phase(state):
     state.votes = []
     counts: dict[int, int] = {}
     for p in state.alive_players():
-        sk = getattr(state, "_seer_knowledge", None) if p.role == ROLE_SEER else None
+        sk = state.seer_known if p.role == ROLE_SEER else None
         target, reasoning = agents.vote(p, state, sk)
         if target is None:
             continue
