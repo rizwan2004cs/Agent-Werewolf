@@ -2,6 +2,11 @@
   "contractName": "AgentWerewolf",
   "abi": [
     {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {
@@ -12,9 +17,9 @@
         },
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "pot",
-          "type": "uint256"
+          "internalType": "uint8",
+          "name": "numPlayers",
+          "type": "uint8"
         }
       ],
       "name": "GameCreated",
@@ -28,34 +33,15 @@
           "internalType": "uint256",
           "name": "gameId",
           "type": "uint256"
-        }
-      ],
-      "name": "NightKillCommitted",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "gameId",
-          "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "playerIdx",
+          "name": "victimIdx",
           "type": "uint8"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "wasWolf",
-          "type": "bool"
         }
       ],
-      "name": "PlayerEliminated",
+      "name": "PlayerKilled",
       "type": "event"
     },
     {
@@ -70,7 +56,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "playerIdx",
+          "name": "idx",
           "type": "uint8"
         },
         {
@@ -94,9 +80,9 @@
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "voter",
-          "type": "address"
+          "internalType": "uint8",
+          "name": "voterIdx",
+          "type": "uint8"
         },
         {
           "indexed": false,
@@ -105,7 +91,7 @@
           "type": "uint8"
         }
       ],
-      "name": "VoteCast",
+      "name": "VoteRecorded",
       "type": "event"
     },
     {
@@ -124,47 +110,11 @@
           "type": "uint8"
         }
       ],
-      "name": "Winner",
+      "name": "WinnerDeclared",
       "type": "event"
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "gameId",
-          "type": "uint256"
-        }
-      ],
-      "name": "claimPrize",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "killHash",
-          "type": "bytes32"
-        }
-      ],
-      "name": "commitNightKill",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address[]",
-          "name": "players",
-          "type": "address[]"
-        },
         {
           "internalType": "bytes32[]",
           "name": "roleHashes",
@@ -179,7 +129,7 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "payable",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -201,19 +151,6 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "gameId",
-          "type": "uint256"
-        }
-      ],
-      "name": "forceEnd",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "gameCount",
       "outputs": [
@@ -221,55 +158,6 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "games",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "pot",
-          "type": "uint256"
-        },
-        {
-          "internalType": "enum AgentWerewolf.Phase",
-          "name": "phase",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint8",
-          "name": "round",
-          "type": "uint8"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "nightKillHash",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bool",
-          "name": "killRevealed",
-          "type": "bool"
-        },
-        {
-          "internalType": "enum AgentWerewolf.Team",
-          "name": "winner",
-          "type": "uint8"
-        },
-        {
-          "internalType": "bool",
-          "name": "prizeClaimed",
-          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -302,12 +190,12 @@
           "type": "uint256"
         }
       ],
-      "name": "getPlayers",
+      "name": "getRevealed",
       "outputs": [
         {
-          "internalType": "address[]",
+          "internalType": "uint8[]",
           "name": "",
-          "type": "address[]"
+          "type": "uint8[]"
         }
       ],
       "stateMutability": "view",
@@ -321,12 +209,12 @@
           "type": "uint256"
         }
       ],
-      "name": "getTally",
+      "name": "getRoleHashes",
       "outputs": [
         {
-          "internalType": "uint256[]",
+          "internalType": "bytes32[]",
           "name": "",
-          "type": "uint256[]"
+          "type": "bytes32[]"
         }
       ],
       "stateMutability": "view",
@@ -340,9 +228,28 @@
           "type": "uint256"
         }
       ],
-      "name": "resolveVote",
-      "outputs": [],
-      "stateMutability": "nonpayable",
+      "name": "getWinner",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "operator",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -356,14 +263,32 @@
           "internalType": "uint8",
           "name": "victimIdx",
           "type": "uint8"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "salt",
-          "type": "bytes32"
         }
       ],
-      "name": "revealNightKill",
+      "name": "recordKill",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "voterIdx",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "targetIdx",
+          "type": "uint8"
+        }
+      ],
+      "name": "recordVote",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -394,72 +319,6 @@
       "name": "revealRole",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint8",
-          "name": "targetIdx",
-          "type": "uint8"
-        }
-      ],
-      "name": "submitVote",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "tally",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "voteOf",
-      "outputs": [
-        {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     }
   ]

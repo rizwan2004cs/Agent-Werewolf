@@ -7,31 +7,29 @@ async function main() {
   const game = await Game.deploy();
   await game.waitForDeployment();
   const gameAddr = await game.getAddress();
-  console.log("AgentWerewolf: ", gameAddr);
+  console.log("AgentWerewolf:", gameAddr);
 
-  const Betting = await hre.ethers.getContractFactory("WerewolfBetting");
-  const betting = await Betting.deploy();
-  await betting.waitForDeployment();
-  const bettingAddr = await betting.getAddress();
-  console.log("WerewolfBetting:", bettingAddr);
+  const Arena = await hre.ethers.getContractFactory("WerewolfArena");
+  const arena = await Arena.deploy();
+  await arena.waitForDeployment();
+  const arenaAddr = await arena.getAddress();
+  console.log("WerewolfArena: ", arenaAddr);
 
-  // Persist addresses so the orchestrator can pick them up.
   const out = {
     network: hre.network.name,
     chainId: hre.network.config.chainId,
     AgentWerewolf: gameAddr,
-    WerewolfBetting: bettingAddr,
+    WerewolfArena: arenaAddr,
   };
   const sharedDir = path.join(__dirname, "..", "..", "shared");
   fs.mkdirSync(sharedDir, { recursive: true });
-  fs.writeFileSync(
-    path.join(sharedDir, "deployed.json"),
-    JSON.stringify(out, null, 2)
-  );
-  console.log("\nWrote shared/deployed.json");
-  console.log("Put these in orchestrator/.env:");
+  fs.writeFileSync(path.join(sharedDir, "deployed.json"), JSON.stringify(out, null, 2));
+
+  console.log("\nWrote shared/deployed.json. Put these in the root .env:");
   console.log(`  GAME_CONTRACT=${gameAddr}`);
-  console.log(`  BETTING_CONTRACT=${bettingAddr}`);
+  console.log(`  BETTING_CONTRACT=${arenaAddr}`);
+  console.log("And in frontend/.env:");
+  console.log(`  VITE_CONTRACT_ADDRESS=${arenaAddr}`);
 }
 
 main().catch((e) => {

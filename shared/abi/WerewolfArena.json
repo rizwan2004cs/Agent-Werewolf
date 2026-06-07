@@ -1,6 +1,11 @@
 {
-  "contractName": "WerewolfBetting",
+  "contractName": "WerewolfArena",
   "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
     {
       "anonymous": false,
       "inputs": [
@@ -40,6 +45,31 @@
           "internalType": "uint256",
           "name": "marketId",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "bettor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "payout",
+          "type": "uint256"
+        }
+      ],
+      "name": "Claimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "marketId",
+          "type": "uint256"
         }
       ],
       "name": "MarketFrozen",
@@ -59,12 +89,6 @@
           "internalType": "uint256",
           "name": "gameId",
           "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint8",
-          "name": "marketType",
-          "type": "uint8"
         },
         {
           "indexed": false,
@@ -162,11 +186,6 @@
         },
         {
           "internalType": "uint8",
-          "name": "marketType",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint8",
           "name": "numOptions",
           "type": "uint8"
         },
@@ -243,11 +262,6 @@
         },
         {
           "internalType": "uint8",
-          "name": "marketType",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint8",
           "name": "numOptions",
           "type": "uint8"
         },
@@ -284,11 +298,6 @@
         },
         {
           "internalType": "uint8",
-          "name": "marketType",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint8",
           "name": "numOptions",
           "type": "uint8"
         }
@@ -302,6 +311,19 @@
         }
       ],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "operator",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
