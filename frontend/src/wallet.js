@@ -18,7 +18,9 @@ function friendly(err) {
   if (/context invalidated|Extension context/i.test(m))
     return new Error("MetaMask was reloaded — refresh this page (F5), then try again.");
   if (err && err.code === 4001) return new Error("Request rejected in MetaMask.");
-  if (/insufficient funds/i.test(m)) return new Error("Not enough MON on this account (chain 143).");
+  if (/insufficient funds/i.test(m)) return new Error("Not enough MON on this account (chain 143). Fund it first.");
+  if (/missing revert data|CALL_EXCEPTION|cannot estimate gas|execution reverted/i.test(m))
+    return new Error("Bet couldn't go through — fund this account with MON on chain 143, and bet before the discussion locks.");
   return err instanceof Error ? err : new Error(m);
 }
 

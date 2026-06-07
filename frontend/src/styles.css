@@ -11,7 +11,8 @@ html, body, #root { height: 100%; margin: 0; }
 body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 
 .app {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   transition: background 1.2s ease;
   color: #0f172a;
   display: flex;
@@ -148,8 +149,8 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
 .reasoning-panel { flex: 0 1 42%; }
 .feed h3, .reasoning-panel h3 { margin: 0 0 8px; font-size: 14px; }
 .feed-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-.chat-line { background: rgba(255,255,255,.05); border-radius: 9px; padding: 7px 10px; font-size: 13px; color: #dbe3ee; line-height: 1.4; }
-.chat-line b { margin-right: 6px; }
+.chat-line { background: #16213c; border: 1px solid #2a3a5e; border-radius: 12px; padding: 9px 12px; font-size: 13px; color: #e2e8f0; line-height: 1.45; box-shadow: 0 2px 6px rgba(0,0,0,.28); }
+.chat-line b { display: block; margin-bottom: 3px; font-size: 12.5px; }
 .reasoning-panel { overflow-y: auto; }
 .thought {
   background: rgba(255,255,255,.06); border-left: 3px solid var(--wolf);
@@ -170,8 +171,9 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
 
 /* ---------------- betting bar (bottom) ---------------- */
 .betting-bar {
-  position: sticky; bottom: 0; background: rgba(8,12,28,.94); color: #e7ecf3;
+  flex-shrink: 0; background: rgba(8,12,28,.94); color: #e7ecf3;
   padding: 12px 20px; border-top: 1px solid #2a3a5e;
+  max-height: 34vh; overflow-y: auto;
 }
 .bet-head { margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .bet-cta { color: var(--gold); animation: pulse 1.3s infinite; }
