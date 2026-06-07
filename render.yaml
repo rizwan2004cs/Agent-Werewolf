@@ -4,7 +4,7 @@
 # Notes:
 # - Both services are pinned to `clean-main`.
 # - Keep secrets in Render Dashboard via `sync: false`.
-# - On free plan, backend may sleep after idle periods.
+# - Service plans are not hardcoded so Render can choose valid defaults.
 services:
   # ---- FastAPI backend ----
   - type: web
@@ -12,7 +12,6 @@ services:
     runtime: python
     rootDir: backend
     branch: clean-main
-    plan: free
     autoDeployTrigger: commit
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: python -m uvicorn server:app --host 0.0.0.0 --port $PORT
@@ -41,7 +40,6 @@ services:
     runtime: static
     rootDir: frontend
     branch: clean-main
-    plan: free
     autoDeployTrigger: commit
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
