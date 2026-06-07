@@ -14,6 +14,7 @@ class Player:
     alive: bool = True
     revealed_role: str | None = None
     current_speech: str | None = None
+    is_human: bool = False          # the one human player in a "play yourself" game
 
 
 @dataclass
@@ -31,6 +32,7 @@ class Market:
 @dataclass
 class GameState:
     game_id: int = 1
+    kind: str = "betting"           # "betting" (7 agents, humans bet) | "human" (1 human + 6 agents)
     phase: str = "setup"            # setup|night|morning|discussion|voting|resolution|ended
     round: int = 1
     max_rounds: int = 2
@@ -44,10 +46,20 @@ class GameState:
     betting_open: bool = True
     markets: list[Market] = field(default_factory=list)
     winner: str | None = None
+    # When set, the loop is blocked waiting for the human player's input.
+    # e.g. {"kind": "speak", "playerIdx": 3} or {"kind": "vote", "playerIdx": 3, "options": [...]}
+    awaiting: dict | None = None
 
     # transient per-round scratch (never serialized to clients)
     seer_knowledge: dict | None = None
     pending_kill: "Player | None" = None
+
+    @property
+    def betting(self) -> bool:
+        return self.kind == "betting"
+
+    def human_player(self) -> "Player | None":
+        return next((p for p in self.players if p.is_human), None)
 
     def alive_players(self) -> list[Player]:
         return [p for p in self.players if p.alive]

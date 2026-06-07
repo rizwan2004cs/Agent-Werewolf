@@ -8,9 +8,18 @@ import threading
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
-from game import history, livestate, loop, serialize
+from game import history, human, livestate, loop, serialize
 from game.roster import new_game
+
+
+class SayIn(BaseModel):
+    text: str
+
+
+class VoteIn(BaseModel):
+    target: str
 
 app = FastAPI(title="Pack — Agent Werewolf")
 app.add_middleware(
@@ -46,8 +55,10 @@ def health():
 
 
 @app.post("/control/start")
-def start():
+def start(kind: str = "betting"):
+    """kind='betting' (7 agents, humans bet) or 'human' (1 human + 6 agents)."""
     global _next_id
+    kind = kind if kind in ("betting", "human") else "betting"
     with _lock:
         running = loop.STATE is not None and loop.STATE.phase not in ("ended", "idle")
         if running:
@@ -56,9 +67,23 @@ def start():
             _next_id = history.next_game_id()
         gid = _next_id
         _next_id += 1
-        state = new_game(gid)
+        state = new_game(gid, kind=kind)
         threading.Thread(target=loop.run_game, args=(state,), daemon=True).start()
-    return {"ok": True, "gameId": state.game_id}
+    return {"ok": True, "gameId": state.game_id, "kind": kind}
+
+
+@app.post("/control/say")
+def control_say(body: SayIn):
+    """Human player submits their discussion line (unblocks the game loop)."""
+    human.submit(body.text)
+    return {"ok": True}
+
+
+@app.post("/control/vote")
+def control_vote(body: VoteIn):
+    """Human player submits their vote target (unblocks the game loop)."""
+    human.submit(body.target)
+    return {"ok": True}
 
 
 @app.get("/state")
@@ -66,7 +91,7 @@ def get_state(mode: str = "bettor"):
     state = loop.STATE
     if state is None:
         return {"phase": "idle"}
-    mode = mode if mode in ("god", "bettor") else "bettor"
+    mode = mode if mode in ("god", "bettor", "player") else "bettor"
     return serialize.to_client(state, mode)
 
 

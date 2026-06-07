@@ -17,6 +17,7 @@ _FILE = _DATA / "live.json"
 def _to_dict(s: GameState) -> dict:
     return {
         "game_id": s.game_id,
+        "kind": s.kind,
         "phase": s.phase,
         "round": s.round,
         "max_rounds": s.max_rounds,
@@ -30,6 +31,7 @@ def _to_dict(s: GameState) -> dict:
         "betting_open": s.betting_open,
         "markets": [vars(m) for m in s.markets],
         "winner": s.winner,
+        "awaiting": s.awaiting,
         "seer_knowledge": s.seer_knowledge,
         "pending_kill_idx": s.pending_kill.idx if s.pending_kill else None,
     }
@@ -37,8 +39,10 @@ def _to_dict(s: GameState) -> dict:
 
 def _from_dict(d: dict) -> GameState:
     s = GameState(game_id=d["game_id"], max_rounds=d["max_rounds"])
+    s.kind = d.get("kind", "betting")
     s.phase = d["phase"]
     s.round = d["round"]
+    s.awaiting = d.get("awaiting")
     s.pot = d["pot"]
     s.speaking_idx = d["speaking_idx"]
     s.players = [Player(**p) for p in d["players"]]
