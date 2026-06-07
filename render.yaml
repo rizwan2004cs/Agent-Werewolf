@@ -1,0 +1,50 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# If Render assigns a different backend subdomain, update VITE_BACKEND_URL
+# in the pack-web service settings after the blueprint is created.
+services:
+  - type: web
+    name: pack-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: MOCK_AGENTS
+        value: "1"
+      - key: MOCK_CHAIN
+        value: "1"
+      - key: RPC_URL
+        value: https://rpc.contract.dev/7a61a13e96b8175dbab19f70930e9bae
+      - key: CHAIN_ID
+        value: "143"
+      - key: GAME_POT_MON
+        value: "1.0"
+      - key: MAX_ROUNDS
+        value: "2"
+      - key: DISCUSSION_ROUNDS
+        value: "2"
+      - key: PACE_SECONDS
+        value: "1.2"
+
+  - type: web
+    name: pack-web
+    runtime: static
+    rootDir: frontend
+    plan: free
+    autoDeploy: true
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: VITE_BACKEND_URL
+        value: https://pack-api.onrender.com

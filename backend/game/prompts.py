@@ -14,10 +14,11 @@ _STYLE = (
     "said; add a NEW point or react to the last speaker. No fancy or formal language."
 )
 
-_TWO_LINE = (
-    "Output EXACTLY two lines, nothing else:\n"
-    "SPEECH: <what you say out loud>\n"
-    "THOUGHT: <your real secret plan, max 12 plain words>"
+# Single JSON object per turn (ported from clean-branch): one call returns the
+# public line AND the hidden thought, parsed reliably with response_format.
+_JSON_OUT = (
+    "Respond with ONLY a JSON object (no markdown, no extra text):\n"
+    '{"speech": "<what you say out loud>", "thought": "<your real secret read, max 12 plain words>"}'
 )
 
 
@@ -47,11 +48,14 @@ def _context(state) -> str:
 
 
 def _base(player, state) -> str:
-    alive, _ = _roster(state)
+    alive, dead = _roster(state)
     persona = PERSONA.get(player.name, "")
     return (
         f"You are {player.name}, playing the party game Werewolf. You are {persona}\n"
-        f"Still alive: {alive}.\nSo far: {_context(state)}\n"
+        f"LIVING players (only these can be wolves now): {alive}.\n"
+        f"DEAD / OUT: {dead}. They are eliminated — never accuse, suspect, or vote them; "
+        "only cite what they said as evidence about the LIVING.\n"
+        f"So far: {_context(state)}\n"
         f"What's been said:\n{_log(state)}"
     )
 
@@ -91,20 +95,19 @@ def day_speak(player, state, seer_known=None) -> str:
         return base + (
             f"\n\nSECRET: You are a WEREWOLF. Your partner is {partner or 'already dead'}. "
             "Act like a worried villager. Use the facts above to quietly steer suspicion onto a REAL "
-            "villager, and never defend your partner too openly.\n" + _STYLE + "\n" + _TWO_LINE
+            "villager, and never defend your partner too openly.\n" + _STYLE + "\n" + _JSON_OUT
         )
     if player.role == "seer":
         return base + (
             f"\n\nSECRET: You are the SEER. {_seer_brief(seer_known or {})} "
             "NEVER say you are the seer, and NEVER say outright that someone 'is a villager' or 'is a "
             "wolf'. Be INDIRECT: act like it's a gut read — softly vouch for someone you know is good "
-            "(\"I trust Vera\") or nudge suspicion onto someone you know is bad (\"something's off about "
-            "Dax\"), without explaining how you know.\n" + _STYLE + "\n" + _TWO_LINE
+            "(\"I trust her\") or nudge suspicion onto someone you know is bad (\"something's off about "
+            "him\"), without explaining how you know.\n" + _STYLE + "\n" + _JSON_OUT
         )
     return base + (
         "\n\nYou're a normal villager. Use the facts above — who died, who was voted out and what they "
-        "turned out to be — to name ONE suspect and say why in plain words.\n" + _STYLE +
-        "\nOutput ONLY your spoken line."
+        "turned out to be — to name ONE suspect and say why in plain words.\n" + _STYLE + "\n" + _JSON_OUT
     )
 
 

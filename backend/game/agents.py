@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import json
 import random
 
 from . import prompts
@@ -48,11 +49,13 @@ def using_mock() -> bool:
     return _USE_MOCK
 
 
-def call_llm(prompt: str, max_tokens: int = 200) -> str:
+def call_llm(prompt: str, max_tokens: int = 200, json_mode: bool = False) -> str:
     if PROVIDER == "openai":
+        kwargs = {"response_format": {"type": "json_object"}} if json_mode else {}
         resp = _client.chat.completions.create(
             model=MODEL, max_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}],
+            **kwargs,
         )
         return resp.choices[0].message.content or ""
     resp = _client.messages.create(
@@ -160,14 +163,26 @@ def night_seer_pick(state):
     return seer, (state.by_name(name) or random.choice(targets))
 
 
+def _parse_speak(raw: str):
+    """JSON {"speech","thought"} -> tuple, with graceful fallback (clean-branch)."""
+    try:
+        data = json.loads(raw)
+        speech = str(data.get("speech", "")).strip()
+        thought = str(data.get("thought", "")).strip()
+        if speech:
+            return speech, (thought or None)
+    except (json.JSONDecodeError, TypeError, AttributeError):
+        pass
+    return _split_speech((raw or "...").strip())   # legacy SPEECH:/THOUGHT: fallback
+
+
 def speak(player, state, seer_knowledge=None):
-    """-> (speech str, thought str | None). Thought feeds the god-mode panel."""
+    """One JSON call -> (speech, thought) for EVERY role (thought feeds god mode)."""
     if _USE_MOCK:
         return _mock_speak(player, state)
-    raw = call_llm(prompts.day_speak(player, state, seer_knowledge), max_tokens=110)
-    if player.role in ("wolf", "seer"):
-        return _split_speech(raw)
-    return raw.strip(), None
+    raw = call_llm(prompts.day_speak(player, state, seer_knowledge),
+                   max_tokens=150, json_mode=True)
+    return _parse_speak(raw)
 
 
 def vote(player, state, seer_knowledge=None):

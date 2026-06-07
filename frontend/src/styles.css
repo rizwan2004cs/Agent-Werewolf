@@ -386,6 +386,7 @@ body { font-family: var(--font-body); font-size: 18px; image-rendering: pixelate
   font-size: 16px; font-style: italic; color: #5b4a8a;
   max-height: 64px; overflow-y: auto; overflow-wrap: anywhere;
 }
+.dlg-caret { animation: pulse .7s steps(2) infinite; }
 @keyframes dlg-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
 /* ---------------- claims (game over) ---------------- */
