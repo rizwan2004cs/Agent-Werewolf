@@ -1,5 +1,5 @@
 // MetaMask + ethers v6 — the only chain writes from the frontend (placeBet/claim).
-import { BrowserProvider, Contract, parseEther } from "ethers";
+import { BrowserProvider, Contract, parseEther, formatEther } from "ethers";
 import abi from "./abi.json";
 
 const ADDR = import.meta.env.VITE_CONTRACT_ADDRESS;
@@ -20,7 +20,7 @@ function friendly(err) {
   if (err && err.code === 4001) return new Error("Request rejected in MetaMask.");
   if (/insufficient funds/i.test(m)) return new Error("Not enough MON on this account (chain 143). Fund it first.");
   if (/missing revert data|CALL_EXCEPTION|cannot estimate gas|execution reverted/i.test(m))
-    return new Error("Bet couldn't go through — fund this account with MON on chain 143, and bet before the discussion locks.");
+    return new Error("Bet rejected by the contract — the betting window has most likely locked for this phase. Try again when betting reopens.");
   return err instanceof Error ? err : new Error(m);
 }
 
@@ -50,7 +50,14 @@ export async function connect() {
   try {
     const e = eth();
     const accounts = await e.request({ method: "eth_requestAccounts" });
-    await ensureChain();
+    // Best effort only: MetaMask often refuses to add private RPCs (contract.dev)
+    // it can't probe. Sponsored bets only need the ADDRESS, so never let the
+    // chain add/switch block connecting — just log it.
+    try {
+      await ensureChain();
+    } catch (err) {
+      console.warn("[wallet] chain add/switch skipped:", err?.message || err);
+    }
     return accounts[0];
   } catch (err) {
     throw friendly(err);
@@ -72,6 +79,12 @@ async function getContract() {
 export async function placeBet(marketId, optionIdx, amountMon = "0.05") {
   try {
     const c = await getContract();
+    // Check balance up front so "no funds" and "window locked" give different errors.
+    const provider = c.runner.provider;
+    const me = await c.runner.getAddress();
+    const bal = await provider.getBalance(me);
+    if (bal < parseEther(String(amountMon)))
+      throw new Error(`Not enough MON: balance is ${(Number(bal) / 1e18).toFixed(4)} MON on chain ${CHAIN_ID}. Fund this account from the operator wallet (public faucets can't reach this private stagenet).`);
     const tx = await c.placeBet(marketId, optionIdx, { value: parseEther(String(amountMon)) });
     await tx.wait();
     return tx.hash;
@@ -80,9 +93,37 @@ export async function placeBet(marketId, optionIdx, amountMon = "0.05") {
   }
 }
 
-export async function claimWinnings(marketId) {
+// Preflight: what the connected account can claim on a resolved market.
+// Mirrors the contract math: payout = totalPool * myStake / winningPool.
+// Returns { payout: "1.2345" (MON string), done: bool } — payout "0" if nothing.
+export async function previewClaim(marketId) {
   const c = await getContract();
-  const tx = await c.claimWinnings(marketId);
-  await tx.wait();
-  return tx.hash;
+  const me = await c.runner.getAddress();
+  const [, , totalPool, , resolved, winningOption] = await c.getMarket(marketId);
+  if (!resolved) return { payout: "0", done: false };
+  const done = await c.claimed(marketId, me);
+  if (done) return { payout: "0", done: true };
+  const myStake = await c.stakeOf(marketId, me, winningOption);
+  if (myStake === 0n) return { payout: "0", done: false };
+  const pools = await c.getPools(marketId);
+  const winPool = pools[Number(winningOption)];
+  const payout = winPool === 0n ? 0n : (totalPool * myStake) / winPool;
+  return { payout: formatEther(payout), done: false };
+}
+
+export async function claimWinnings(marketId) {
+  try {
+    const c = await getContract();
+    const tx = await c.claimWinnings(marketId);
+    await tx.wait();
+    return tx.hash;
+  } catch (err) {
+    const m = (err && (err.message || String(err))) || "";
+    if (/nothing to claim/i.test(m)) throw new Error("Nothing to claim — you didn't stake the winning option.");
+    if (/already claimed/i.test(m)) throw new Error("Already claimed for this market.");
+    if (/unresolved/i.test(m)) throw new Error("Market isn't resolved yet.");
+    if (/missing revert data|CALL_EXCEPTION|cannot estimate gas|execution reverted/i.test(m))
+      throw new Error("Claim rejected — nothing to claim on this market (or already claimed).");
+    throw friendly(err);
+  }
 }

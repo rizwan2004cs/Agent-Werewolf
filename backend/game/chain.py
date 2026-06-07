@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import os
 import json
+import threading
 from pathlib import Path
 
 MOCK_CHAIN = os.environ.get("MOCK_CHAIN", "1") == "1"
@@ -52,18 +53,49 @@ def role_hash(role_enum: int, idx: int, salt_hex: str) -> bytes:
     return Web3.keccak(bytes([role_enum, idx]) + salt)
 
 
-def _send(fn, value: int = 0):
-    tx = fn.build_transaction({
-        "from": _acct.address,
-        "nonce": w3.eth.get_transaction_count(_acct.address),
-        "value": value,
-        "chainId": _CHAIN_ID,
-        "gas": 600000,
-        "gasPrice": w3.eth.gas_price,
-    })
-    signed = _acct.sign_transaction(tx)
-    h = w3.eth.send_raw_transaction(signed.raw_transaction)
+# All operator txs come from ONE key, so they must go out one at a time with
+# strictly increasing nonces. The game thread (freeze/resolve) and the API
+# thread (sponsored /bet) both send txs — without this lock they collide.
+# (Ported from clean-branch chain/client.py.)
+_tx_lock = threading.Lock()
+_next_nonce: int | None = None
+
+
+def _broadcast(build_tx):
+    """build_tx(nonce) -> tx hash. Serialized, nonce-tracked, one retry."""
+    global _next_nonce
+    with _tx_lock:
+        chain_nonce = w3.eth.get_transaction_count(_acct.address, "pending")
+        if _next_nonce is None or chain_nonce > _next_nonce:
+            _next_nonce = chain_nonce
+        nonce = _next_nonce
+        try:
+            h = build_tx(nonce)
+        except Exception:
+            # Resync from chain and retry once (stale/colliding nonce).
+            nonce = w3.eth.get_transaction_count(_acct.address, "pending")
+            h = build_tx(nonce)
+        _next_nonce = nonce + 1
     return w3.eth.wait_for_transaction_receipt(h)
+
+
+def _send(fn, value: int = 0):
+    def build(nonce):
+        tx = fn.build_transaction({
+            "from": _acct.address,
+            "nonce": nonce,
+            "value": value,
+            "chainId": _CHAIN_ID,
+            "gasPrice": w3.eth.gas_price,
+        })
+        try:
+            tx["gas"] = int(w3.eth.estimate_gas(tx) * 1.25)
+        except Exception:
+            tx["gas"] = 600000
+        signed = _acct.sign_transaction(tx)
+        return w3.eth.send_raw_transaction(signed.raw_transaction)
+
+    return _broadcast(build)
 
 
 # ------------------------------------------------------ game (immutable log) --
@@ -133,3 +165,44 @@ def get_pools(market_id: int):
 
     raw = arena.functions.getPools(market_id).call()
     return [str(Web3.from_wei(x, "ether")) for x in raw]
+
+
+def place_bet(market_id: int, option_idx: int, amount_mon: str):
+    """House-sponsored bet: the OPERATOR wallet stakes on behalf of a user, so
+    bettors need no MON and sign nothing. Off-chain bookkeeping (loop.py) tracks
+    whose bet it is; payouts go out via send_mon on resolution."""
+    _log(f"placeBet(market={market_id}, option={option_idx}, {amount_mon} MON, sponsored)")
+    if MOCK_CHAIN:
+        return None
+    from web3 import Web3
+
+    return _send(arena.functions.placeBet(market_id, option_idx),
+                 value=Web3.to_wei(amount_mon, "ether"))
+
+
+def send_mon(to_address: str, amount_mon: str):
+    """Direct MON transfer from the operator wallet (sponsored payout). Returns tx hash hex."""
+    _log(f"sendMON({amount_mon} -> {to_address})")
+    if MOCK_CHAIN:
+        return None
+    from web3 import Web3
+
+    sent_hash = {}
+
+    def build(nonce):
+        tx = {
+            "from": _acct.address,
+            "to": Web3.to_checksum_address(to_address),
+            "value": Web3.to_wei(amount_mon, "ether"),
+            "nonce": nonce,
+            "chainId": _CHAIN_ID,
+            "gas": 21000,
+            "gasPrice": w3.eth.gas_price,
+        }
+        signed = _acct.sign_transaction(tx)
+        h = w3.eth.send_raw_transaction(signed.raw_transaction)
+        sent_hash["h"] = h
+        return h
+
+    _broadcast(build)
+    return sent_hash["h"].hex()

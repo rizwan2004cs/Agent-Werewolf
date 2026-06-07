@@ -1,13 +1,31 @@
+import { useEffect, useState } from "react";
 import Character from "./Character";
 import PrizePot from "./PrizePot";
 
-// Fit the ring to the viewport so nothing hides behind the betting bar / header.
-function ringRadius() {
-  const h = typeof window !== "undefined" ? window.innerHeight : 800;
-  const w = typeof window !== "undefined" ? window.innerWidth : 1200;
-  const byHeight = (h - 470) / 2;   // leave room for header + betting bar + labels
-  const byWidth = w * 0.34;
-  return Math.max(140, Math.min(230, Math.round(Math.min(byHeight, byWidth))));
+// Fit the ring inside the ACTUAL stage box (measured live with a
+// ResizeObserver), so characters never slide under the top bar, sidebar or
+// betting bar. Margins reserve space for the avatar + name chip + role tag.
+const MARGIN_X = 135;   // half character width + side breathing room
+const MARGIN_TOP = 120; // avatar half above the ring line
+const MARGIN_BOTTOM = 175; // avatar half + nameplate + role tag below it
+
+function useRingRadius() {
+  const [el, setEl] = useState(null);
+  const [radius, setRadius] = useState(170);
+  useEffect(() => {
+    if (!el) return;
+    const measure = () => {
+      const { width: w, height: h } = el.getBoundingClientRect();
+      const byH = (h - MARGIN_TOP - MARGIN_BOTTOM) / 2;
+      const byW = w / 2 - MARGIN_X;
+      setRadius(Math.max(140, Math.min(320, Math.round(Math.min(byH, byW)))));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [el]);
+  return [setEl, radius];
 }
 
 function ringStyle(idx, total, radius) {
@@ -19,31 +37,19 @@ function ringStyle(idx, total, radius) {
   };
 }
 
-// Latest "real thought" per speaker (skip the (night)/(vote) bookkeeping lines).
-function latestThoughts(reasoning) {
-  const map = {};
-  for (const r of reasoning || []) {
-    const t = r.thought || "";
-    if (t.startsWith("(night)") || t.startsWith("(vote)")) continue;
-    map[r.speaker] = t;
-  }
-  return map;
-}
-
 export default function VillageScene({ state, godMode }) {
+  const [sceneRef, radius] = useRingRadius();
   if (!state || state.phase === "idle" || !state.players?.length) {
     return (
-      <div className="scene empty">
+      <div className="scene empty" ref={sceneRef}>
         <PrizePot pot={state?.pot ?? "—"} phase="idle" />
         <div className="empty-hint">Press ▶ Start to gather the village</div>
       </div>
     );
   }
   const total = state.players.length;
-  const radius = ringRadius();
-  const thoughts = godMode ? latestThoughts(state.privateReasoning) : {};
   return (
-    <div className="scene">
+    <div className="scene" ref={sceneRef}>
       <PrizePot
         pot={state.pot}
         phase={state.phase}
@@ -56,7 +62,6 @@ export default function VillageScene({ state, godMode }) {
           player={p}
           isSpeaking={state.speakingIdx === p.idx}
           godMode={godMode}
-          thought={thoughts[p.name]}
           style={ringStyle(p.idx, total, radius)}
         />
       ))}

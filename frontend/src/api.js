@@ -14,3 +14,16 @@ export async function fetchState(mode) {
 export async function startGame() {
   return fetch(`${BASE}/control/start`, { method: "POST" });
 }
+
+// House-sponsored bet: gas-free, no MON needed — just your address.
+// The operator stakes on-chain for you; winnings arrive in your wallet.
+export async function postBet(marketId, option, address, amount) {
+  const r = await fetch(`${BASE}/bet`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ marketId, option, address, amount: parseFloat(amount) }),
+  });
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error || "bet failed");
+  return j.message;
+}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchState, startGame } from "./api";
 import TopBar from "./scene/TopBar";
 import VillageScene from "./scene/VillageScene";
+import DialogueOverlay from "./scene/DialogueOverlay";
 import DiscussionFeed from "./scene/DiscussionFeed";
 import ReasoningPanel from "./scene/ReasoningPanel";
 import GameOverOverlay from "./scene/GameOverOverlay";
@@ -52,6 +53,7 @@ export default function App() {
       <div className="main">
         <div className="stage">
           <VillageScene state={state} godMode={godMode} />
+          {playing && <DialogueOverlay state={state} godMode={godMode} />}
           {isNight && playing && <div className="night-toast">🌙 The village sleeps…</div>}
         </div>
         {playing && (

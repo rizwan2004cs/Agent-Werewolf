@@ -11,8 +11,9 @@ import threading
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
-from game import loop, chain
+from game import loop, chain, agents, history
 
 app = FastAPI(title="Pack Orchestrator")
 app.add_middleware(
@@ -25,11 +26,18 @@ app.add_middleware(
 _lock = threading.Lock()
 _thread: threading.Thread | None = None
 _last_pool_refresh = 0.0
+# Monotonic game-id counter, seeded from history on first start (ported from
+# clean-branch) — a live chain id from createGame still overrides it.
+_next_id: int | None = None
 
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    return {
+        "ok": True,
+        "agents": "mock" if agents.using_mock() else agents.MODEL,
+        "chain": "mock" if chain.MOCK_CHAIN else "live",
+    }
 
 
 @app.get("/")
@@ -39,21 +47,51 @@ def root():
 
 @app.post("/control/start")
 def start():
-    global _thread
+    global _thread, _next_id
     with _lock:
         if _is_running():
             return {"ok": False, "error": "game already running"}
+        if _next_id is None:
+            _next_id = history.next_game_id()
         state = loop.new_state()
+        state.game_id = _next_id
+        _next_id += 1
         _thread = threading.Thread(target=_run, args=(state,), daemon=True)
         _thread.start()
     return {"ok": True, "gameId": state.game_id}
 
 
+@app.get("/history")
+def get_history():
+    """Past completed games, newest first."""
+    return list(reversed(history.load()))
+
+
+class BetIn(BaseModel):
+    marketId: int
+    option: str
+    address: str
+    amount: float = 0.05
+
+
+@app.post("/bet")
+def bet(b: BetIn):
+    """House-sponsored bet: no MON or gas needed from the user — the operator
+    stakes on-chain for them; winnings are sent straight to their wallet."""
+    s = loop.STATE
+    if s is None:
+        return {"ok": False, "error": "no game running"}
+    ok, msg = loop.place_sponsored_bet(s, b.marketId, b.option, b.address, float(b.amount))
+    return {"ok": ok, ("message" if ok else "error"): msg}
+
+
 @app.get("/state")
 def get_state(mode: str = "bettor"):
     s = loop.STATE
+    provider = "mock" if agents.using_mock() else agents.MODEL
     if s is None:
-        return {"phase": "idle", "players": [], "markets": [], "discussionLog": []}
+        return {"phase": "idle", "players": [], "markets": [], "discussionLog": [],
+                "agentProvider": provider}
     # When betting is open on a live chain, refresh pools (throttled) so a bet
     # just placed via MetaMask shows up in the odds within ~2s.
     global _last_pool_refresh
@@ -85,6 +123,7 @@ def serialize(s, mode: str) -> dict:
             "currentSpeech": p.current_speech,
         })
     out = {
+        "agentProvider": "mock" if agents.using_mock() else agents.MODEL,
         "gameId": s.game_id,
         "phase": s.phase,
         "round": s.round,
@@ -98,6 +137,7 @@ def serialize(s, mode: str) -> dict:
         "bettingOpen": s.betting_open,
         "markets": [m.to_json() for m in s.markets],
         "winner": s.winner,
+        "payouts": s.payouts,
     }
     if god:
         out["privateReasoning"] = s.private_reasoning
