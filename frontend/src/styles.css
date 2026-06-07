@@ -84,31 +84,19 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
 /* ---------------- characters (ring) ---------------- */
 .character { position: absolute; width: 104px; text-align: center; transition: all .45s ease; }
 .character.dead { opacity: .4; filter: grayscale(1); transform: translate(-50%,-50%) scale(.92) !important; }
-/* Among Us-style crewmate, drawn in CSS (no image dependency) */
-.crewmate { position: relative; width: 60px; height: 72px; margin: 0 auto; }
-.cm-body {
-  position: absolute; left: 9px; top: 4px; width: 42px; height: 54px;
-  background: var(--c);
-  border-radius: 24px 24px 16px 16px / 30px 30px 14px 14px;
-  box-shadow: inset -7px -5px 0 rgba(0,0,0,.18), 0 5px 12px rgba(0,0,0,.35);
+/* Generic player avatar — a person icon in a coloured disc (no image dependency) */
+.pavatar {
+  position: relative; width: 74px; height: 74px; margin: 0 auto; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), transparent 60%), var(--c);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 5px 14px rgba(0,0,0,.35), inset 0 -3px 8px rgba(0,0,0,.2);
 }
-.cm-backpack {
-  position: absolute; left: 2px; top: 18px; width: 13px; height: 28px;
-  background: var(--c); border-radius: 7px; filter: brightness(.82);
-  box-shadow: inset -3px 0 0 rgba(0,0,0,.15);
+.pavatar-icon { width: 46px; height: 46px; fill: rgba(255,255,255,.95); }
+.character.speaking .pavatar {
+  box-shadow: 0 0 0 4px var(--gold), 0 0 24px var(--gold);
+  animation: bob .55s ease-in-out infinite alternate;
 }
-.cm-visor {
-  position: absolute; right: 3px; top: 11px; width: 28px; height: 18px;
-  background: linear-gradient(160deg, #d6ecff, #8fbbe6); border-radius: 11px;
-  box-shadow: inset 3px 3px 0 rgba(255,255,255,.65), inset 0 0 0 3px rgba(0,0,0,.08);
-}
-.cm-legs { position: absolute; bottom: 0; left: 9px; width: 42px; display: flex; justify-content: space-between; }
-.cm-legs span { width: 16px; height: 9px; background: var(--c); border-radius: 0 0 7px 7px; filter: brightness(.9); }
-.character.speaking .crewmate { animation: bob .55s ease-in-out infinite alternate; }
-.character.speaking .cm-body {
-  box-shadow: inset -7px -5px 0 rgba(0,0,0,.18), 0 0 0 3px var(--gold), 0 0 22px var(--gold);
-}
-.tombstone { position: absolute; bottom: -4px; right: -8px; font-size: 22px; }
+.tombstone { position: absolute; bottom: -4px; right: -6px; font-size: 22px; }
 .nameplate { margin-top: 7px; font-weight: 800; font-size: 14px; }
 .role-tag {
   display: inline-block; margin-top: 3px; font-size: 11px; font-weight: 700;
