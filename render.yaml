@@ -1,0 +1,55 @@
+# Render Blueprint — deploys the Pack stack (backend API + static frontend).
+# In Render: New > Blueprint > point at this repo. Secrets (sync:false) are
+# entered in the Render dashboard, never committed here.
+#
+# Caveats for the free plan:
+#  - The Python web service sleeps after ~15 min idle and resets in-memory game
+#    state on wake/restart (history.json is also ephemeral on free disk).
+#  - For a live multi-audience demo, keep the backend warm or use a paid plan.
+services:
+  # ---- FastAPI backend: game loop + /state + /history + chain calls ----
+  - type: web
+    name: pack-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY        # secret — set in dashboard
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: RPC_URL               # contract.dev stagenet RPC (has a token) — secret
+        sync: false
+      - key: CHAIN_ID
+        value: "143"
+      - key: CONTRACT_ADDRESS
+        value: "0x3e78581cB1e864489B1975f1896cA599efa04258"
+      - key: OPERATOR_KEY          # operator private key — secret, NEVER commit
+        sync: false
+      - key: PACE
+        value: "3"
+
+  # ---- Vite/React frontend: served as a static site ----
+  - type: web
+    name: pack-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_BACKEND_URL      # set to the deployed pack-backend URL
+        sync: false
+      - key: VITE_CONTRACT_ADDRESS
+        value: "0x3e78581cB1e864489B1975f1896cA599efa04258"
+      - key: VITE_CHAIN_ID
+        value: "143"
+      - key: VITE_RPC_URL          # baked into the client bundle (public) — set in dashboard
+        sync: false
+      - key: VITE_EXPLORER_URL
+        value: ""
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -1,0 +1,23 @@
+# --- secrets (NEVER commit) ---
+.env
+*.env
+!.env.example
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# --- node / frontend build ---
+node_modules/
+dist/
+
+# --- runtime data ---
+backend/data/
+
+# --- misc ---
+.DS_Store
+Thumbs.db
+*.log
