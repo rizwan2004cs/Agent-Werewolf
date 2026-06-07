@@ -8,18 +8,41 @@ import random
 
 from . import prompts
 
-MODEL = os.environ.get("AGENT_MODEL", "claude-haiku-4-5-20251001")
-_USE_MOCK = os.environ.get("MOCK_AGENTS") == "1" or not os.environ.get("ANTHROPIC_API_KEY")
+# Provider auto-detect: OpenAI if its key is present, else Anthropic, else mock.
+# Force mock with MOCK_AGENTS=1. Override the model with AGENT_MODEL.
+_FORCE_MOCK = os.environ.get("MOCK_AGENTS") == "1"
+_OPENAI_KEY = os.environ.get("OPENAI_API_KEY")
+_ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY")
+
+PROVIDER = "mock"
+if not _FORCE_MOCK:
+    if _OPENAI_KEY:
+        PROVIDER = "openai"
+    elif _ANTHROPIC_KEY:
+        PROVIDER = "anthropic"
+
+_DEFAULT_MODELS = {"openai": "gpt-4o-mini", "anthropic": "claude-haiku-4-5-20251001"}
+MODEL = os.environ.get("AGENT_MODEL") or _DEFAULT_MODELS.get(PROVIDER, "")
 
 _client = None
-if not _USE_MOCK:
+if PROVIDER == "openai":
+    try:
+        from openai import OpenAI
+
+        _client = OpenAI(api_key=_OPENAI_KEY)
+    except Exception as e:  # pragma: no cover - import/credential issues
+        print(f"[agents] OpenAI init failed, falling back to mock: {e}")
+        PROVIDER = "mock"
+elif PROVIDER == "anthropic":
     try:
         from anthropic import Anthropic
 
-        _client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+        _client = Anthropic(api_key=_ANTHROPIC_KEY)
     except Exception as e:  # pragma: no cover - import/credential issues
-        print(f"[agents] falling back to mock mode: {e}")
-        _USE_MOCK = True
+        print(f"[agents] Anthropic init failed, falling back to mock: {e}")
+        PROVIDER = "mock"
+
+_USE_MOCK = PROVIDER == "mock"
 
 
 def using_mock() -> bool:
@@ -29,6 +52,14 @@ def using_mock() -> bool:
 # ----------------------------------------------------------------- real LLM ---
 
 def call_llm(prompt: str, max_tokens: int = 200) -> str:
+    if PROVIDER == "openai":
+        resp = _client.chat.completions.create(
+            model=MODEL,
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return resp.choices[0].message.content or ""
+    # anthropic
     resp = _client.messages.create(
         model=MODEL,
         max_tokens=max_tokens,
