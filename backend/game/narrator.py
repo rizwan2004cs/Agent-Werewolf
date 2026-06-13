@@ -48,6 +48,12 @@ class ConsoleNarrator(Narrator):
     def _on_speech(self, name, text):
         print(f"    {name}: {text}", flush=True)
 
+    def _on_accused(self, name):
+        print(f"\n--- ALL EYES ON {name} --- (the prime suspect must defend)", flush=True)
+
+    def _on_defense(self, name, text):
+        print(f"    {name} (defense): {text}", flush=True)
+
     def _on_voting_start(self):
         print("\n--- VOTING ---", flush=True)
 
@@ -56,6 +62,9 @@ class ConsoleNarrator(Narrator):
 
     def _on_eliminated(self, name, role):
         print(f"  -> {name} is voted out. They were a {role}.", flush=True)
+
+    def _on_last_words(self, name, text):
+        print(f"    {name} (last words): {text}", flush=True)
 
     def _on_game_over(self, winner, roles):
         print(f"\n========== GAME OVER: {winner.upper()} WIN ==========", flush=True)

@@ -5,7 +5,7 @@ export default function TopBar({ state, mode, screen, onToggleMode, onStart, onH
   return (
     <header className="topbar">
       <div className="brand">🐺 PACK</div>
-      <div className="tagline">{isPlay ? "Play yourself · 1 human + 6 agents" : "AI werewolves · humans bet · Monad referees"}</div>
+      <div className="tagline">{isPlay ? "Play yourself · 1 human + 6 agents" : "AI werewolves · humans bet with play money"}</div>
       {state?.agentProvider && (
         <div className={`llm-badge ${state.agentProvider === "mock" ? "mock" : "live"}`}>
           {state.agentProvider === "mock" ? "⚠ MOCK AGENTS" : `🤖 ${state.agentProvider}`}

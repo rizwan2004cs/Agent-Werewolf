@@ -30,6 +30,7 @@ def _to_dict(s: GameState) -> dict:
         "votes": s.votes,
         "betting_open": s.betting_open,
         "markets": [vars(m) for m in s.markets],
+        "payouts": s.payouts,
         "winner": s.winner,
         "awaiting": s.awaiting,
         "seer_knowledge": s.seer_knowledge,
@@ -52,6 +53,7 @@ def _from_dict(d: dict) -> GameState:
     s.votes = d["votes"]
     s.betting_open = d["betting_open"]
     s.markets = [Market(**m) for m in d["markets"]]
+    s.payouts = d.get("payouts", [])
     s.winner = d["winner"]
     s.seer_knowledge = d.get("seer_knowledge")
     pk = d.get("pending_kill_idx")

@@ -1,14 +1,14 @@
 """The six phases, each a function over (state, narrator).
 
 Phases mutate GameState, drive pacing beats, delegate decisions to `agents`,
-betting to `chain.markets`, adjudication to `rules`, and narration to the
-narrator. They contain no transport, parsing, or print logic of their own.
+betting to `markets` (off-chain play money), adjudication to `rules`, and
+narration to the narrator. They contain no transport or parsing logic.
 """
 import random
+import re
 import time
 
-from . import agents, human, livestate, rules
-from .chain import markets
+from . import agents, human, livestate, markets, rules
 from .config import config
 from .narrator import Narrator
 from .state import GameState, Player
@@ -32,6 +32,52 @@ def _hold_speech(text: str) -> None:
         return
     n = len(text or "")
     time.sleep(min(16.0, max(3.5, n / 22)))  # > n/30 typing time, with margin
+
+
+def _say_beat(state, nar, player, speech, thought, kind, event):
+    """Render one player's spoken line as a tagged dramatic beat (defense /
+    last words): drive the speech bubble, log it, and hold it on screen."""
+    state.speaking_idx = player.idx
+    state.speech_kind = kind
+    player.current_speech = speech
+    state.discussion_log.append(
+        {
+            "round": state.round,
+            "speaker": player.name,
+            "text": speech,
+            "ts": int(time.time()),
+            "kind": kind,
+        }
+    )
+    state.private_reasoning.append(
+        {"speaker": player.name, "role": player.role, "thought": thought}
+    )
+    nar.emit(event, name=player.name, text=speech)
+    _hold_speech(speech)
+    player.current_speech = None
+    state.speech_kind = None
+
+
+def _most_accused(state: GameState) -> Player | None:
+    """The living player most often named by OTHERS in this round's discussion —
+    the village's prime suspect. None if it's too early or no one stands out."""
+    living = state.alive_players()
+    if len(living) < 3:
+        return None
+    counts = {p.idx: 0 for p in living}
+    for e in state.discussion_log:
+        if e.get("round") != state.round:
+            continue
+        speaker, text = e.get("speaker"), e.get("text", "")
+        for p in living:
+            if p.name == speaker:
+                continue
+            first = re.escape(p.name.split()[0])
+            full = re.escape(p.name)
+            if re.search(rf"\b({full}|{first})\b", text, re.IGNORECASE):
+                counts[p.idx] += 1
+    top = max(counts, key=counts.get)
+    return state.players[top] if counts[top] > 0 else None
 
 
 def _human_speak(state: GameState, p: Player) -> tuple[str, str]:
@@ -109,6 +155,7 @@ def morning(state: GameState, nar: Narrator) -> None:
 def discussion(state: GameState, nar: Narrator) -> None:
     state.phase = "discussion"
     state.betting_open = False
+    state.speech_kind = None
     if state.betting:
         markets.freeze_open(state)
     nar.emit("discussion_start")
@@ -145,6 +192,15 @@ def discussion(state: GameState, nar: Narrator) -> None:
 def voting(state: GameState, nar: Narrator) -> None:
     state.phase = "voting"
     state.votes = []
+
+    # Drama beat: the village's prime suspect pleads their case before the vote.
+    accused = _most_accused(state)
+    if accused and not accused.is_human:
+        nar.emit("accused", name=accused.name)
+        sk = state.seer_knowledge if accused.role == "seer" else None
+        speech, thought = agents.defend(accused, state, sk)
+        _say_beat(state, nar, accused, speech, thought, "defense", "defense")
+
     nar.emit("voting_start")
     for p in state.alive_players():
         sk = state.seer_knowledge if p.role == "seer" else None
@@ -160,6 +216,13 @@ def voting(state: GameState, nar: Narrator) -> None:
     nar.emit("eliminated", name=out.name, role=out.role)
     if state.betting:
         markets.resolve_who_voted_out(state, out.name)
+
+    # Drama beat: the eliminated player's role is now public — give them a final line.
+    if not out.is_human:
+        lw_speech, lw_thought = agents.last_words(out, state)
+        _say_beat(state, nar, out, lw_speech, lw_thought, "last_words", "last_words")
+    state.speaking_idx = None
+
     state.phase = "resolution"
     _beat(1)
     livestate.save(state)

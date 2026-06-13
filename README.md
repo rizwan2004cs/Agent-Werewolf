@@ -1,63 +1,41 @@
-# Pack - Agent Werewolf on Monad
+# Pack — Agent Werewolf
 
-AI agents play social deduction, humans can bet or play, and the chain acts as referee.
+7 AI agents play Werewolf (social deduction). Humans watch and bet **play money**
+on the outcome, or join the table as a hidden-role player. No blockchain, no
+wallet — everything runs off-chain in memory so it deploys to any free host.
 
-## Playable game flow
+## Game modes
 
-1. Open the app and choose a mode from Home.
-2. Click `Start` to begin a round.
-3. Watch agents discuss, vote, and resolve day/night phases.
-4. Either place bets (Betting Arena) or play directly as a hidden-role participant.
+- **Betting Arena (spectator/bettor)**: watch 7 AI agents discuss, vote, and
+  resolve. Each browser gets a starting balance of play-money points and can bet
+  on live markets ("who wins?", "who gets voted out?"). Winners split the pool
+  pro-rata (parimutuel) and the winnings are credited back automatically.
+- **Play Yourself (human + agents)**: join as a player with a secret role and
+  play through discussion + voting.
+- **God mode / bettor mode**: toggle between full visibility and fog-of-war.
 
-> Note: game startup and some turns can take a little time while OpenAI + LangGraph generate agent decisions. A short delay is expected.
+> Note: with a real `OPENAI_API_KEY`, agent turns can take a moment while the
+> model generates decisions. Without a key the game runs instantly in mock mode.
 
-## Game versions and gameplay modes
+## How the betting works (no chain)
 
-- **Betting Arena (spectator/bettor)**: watch 7 AI agents, switch views, and bet on outcomes.
-- **Play Yourself (human + agents)**: join as a player with a secret role and play through discussion + voting.
-- **God mode / bettor mode views**: switch between richer visibility and fog-of-war style information.
+- Each browser gets a random `bettor id` (stored in `localStorage`) and starts
+  with 100 play-money points.
+- Bets are pooled per market/option on the backend (`backend/game/markets.py`).
+- When a market resolves, the whole pool is split among the winners in
+  proportion to their stake, and credited back to their balance.
+- It's all in-memory: a fresh game (or backend restart) resets balances.
 
 ## Stack
 
 - Frontend: React + Vite
-- Backend: FastAPI
-- Agent runtime: OpenAI + LangGraph
-- Chain: Monad (contract.dev / chainId 143)
+- Backend: FastAPI + (optional) OpenAI + LangGraph
+- Betting: in-memory parimutuel simulation (play money)
 
-## Gameplay screenshots (clean-main)
-
-### Home
-
-![Pack home screen](docs/screenshots/clean-main-home.png)
-
-### Betting Arena (God mode)
-
-![Pack betting arena god mode](docs/screenshots/clean-main-betting-god-live.png)
-
-### Betting Arena (Bettor mode + wallet panel)
-
-![Pack bettor mode](docs/screenshots/clean-main-bettor-live.png)
-
-### Play Yourself
-
-![Pack player mode](docs/screenshots/clean-main-player.png)
-
-### Alternate betting gameplay view
-
-![Pack betting arena alternate view](docs/screenshots/clean-main-betting.png)
-
-## What to expect in gameplay
-
-- **Setup phase**: players and roles initialize, then first night/day cycle starts.
-- **Discussion phase**: agents speak in sequence and build suspicion.
-- **Vote phase**: village votes to eliminate one player.
-- **End state**: winner and outcomes are shown based on role win conditions.
-- **Slow turn moments are normal**: OpenAI + LangGraph calls can make some turns feel delayed while responses are generated.
-
-## Quick start
+## Quick start (local)
 
 ```bash
-# backend
+# backend (runs in mock mode with no API key)
 cd backend
 python -m pip install -r requirements.txt
 python -m uvicorn server:app --reload --port 8000
@@ -68,3 +46,19 @@ npm install
 npm run dev
 ```
 
+Then open the Vite dev URL. To use real agents, put `OPENAI_API_KEY=...` in a
+root `.env` (see `.env.example`).
+
+## Deploy (Render free tier)
+
+This repo ships a `render.yaml` Blueprint that deploys two services:
+
+1. `pack-backend` (Python web service) — set `OPENAI_API_KEY` in the dashboard
+   (or leave it unset to run mock agents).
+2. `pack-frontend` (static site) — set `VITE_BACKEND_URL` to the deployed
+   backend URL.
+
+In Render: **New → Blueprint → point at this repo**, then fill in the secrets.
+
+> Free-plan caveat: the backend sleeps after ~15 min idle and resets in-memory
+> game state + balances on wake. Fine for demos; use a paid plan to keep it warm.

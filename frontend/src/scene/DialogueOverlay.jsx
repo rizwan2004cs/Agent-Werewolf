@@ -44,9 +44,14 @@ export default function DialogueOverlay({ state, godMode }) {
   const seed = encodeURIComponent(player.avatarSeed || player.name);
   const avatar = `https://api.dicebear.com/9.x/pixel-art/svg?seed=${seed}`;
   const thought = godMode ? latestThought(state.privateReasoning, player.name) : null;
+  const kind = state.speechKind;
+  const banner =
+    kind === "defense" ? "⚖ DEFENSE — the village is voting"
+      : kind === "last_words" ? "☠ LAST WORDS"
+        : null;
 
   return (
-    <div className="dialogue-overlay">
+    <div className={`dialogue-overlay ${kind || ""}`}>
       <div className="dlg-portrait" style={{ "--c": color }}>
         {imgOk ? (
           <img src={avatar} alt={player.name} onError={() => setImgOk(false)} />
@@ -55,6 +60,7 @@ export default function DialogueOverlay({ state, godMode }) {
         )}
       </div>
       <div className="dlg-box">
+        {banner && <div className={`dlg-banner ${kind}`}>{banner}</div>}
         <div className="dlg-name">✦ {player.name} ✦</div>
         <div className="dlg-text">{shown}{!done && <span className="dlg-caret">▌</span>}</div>
         {done && thought && <div className="dlg-thought">💭 {thought}</div>}

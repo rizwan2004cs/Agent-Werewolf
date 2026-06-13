@@ -18,8 +18,12 @@ export default function DiscussionFeed({ log, players }) {
       <div className="feed-scroll">
         {(!log || !log.length) && <div className="muted">The discussion will appear here…</div>}
         {log?.map((e, i) => (
-          <div key={i} className="chat-line">
-            <b style={{ color: colorFor(e.speaker, players) }}>{e.speaker}</b>
+          <div key={i} className={`chat-line ${e.kind || ""}`}>
+            <b style={{ color: colorFor(e.speaker, players) }}>
+              {e.speaker}
+              {e.kind === "defense" && <span className="line-tag defense">⚖ defends</span>}
+              {e.kind === "last_words" && <span className="line-tag last">☠ last words</span>}
+            </b>
             <span>{e.text}</span>
           </div>
         ))}

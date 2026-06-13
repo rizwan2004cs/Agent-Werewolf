@@ -1,6 +1,5 @@
 langgraph
 langchain-openai
-web3
 fastapi
 uvicorn
 python-dotenv

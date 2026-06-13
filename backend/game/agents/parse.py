@@ -17,16 +17,25 @@ def speak(raw: str) -> tuple[str, str]:
 
 
 def name(text: str, candidates: list[str]) -> str | None:
-    """First candidate name mentioned anywhere in the text."""
-    for n in candidates:
-        if re.search(rf"\b{re.escape(n)}\b", text, re.IGNORECASE):
-            return n
-    return None
+    """The candidate name appearing EARLIEST in the text (best reflects intent
+    when several names are mentioned). Returns None if none are found."""
+    best, best_pos = None, len(text) + 1
+    for c in candidates:
+        m = re.search(rf"\b{re.escape(c)}\b", text, re.IGNORECASE)
+        if m and m.start() < best_pos:
+            best, best_pos = c, m.start()
+    return best
 
 
 def vote(text: str, candidates: list[str]) -> str | None:
-    """Prefer the explicit `VOTE:<name>` line; else any name mentioned."""
-    m = re.search(r"VOTE:\s*(\w+)", text, re.IGNORECASE)
-    if m and any(m.group(1).lower() == c.lower() for c in candidates):
-        return m.group(1)
+    """Prefer the explicit `VOTE:<name>` line (multi-word names supported);
+    else fall back to the earliest candidate mentioned anywhere."""
+    m = re.search(r"VOTE:\s*(.+)", text, re.IGNORECASE)
+    if m:
+        tail = m.group(1).strip()
+        # Match against the full candidate names; prefer the longest match so
+        # "Victor Kane" wins over a stray "Victor" substring.
+        for c in sorted(candidates, key=len, reverse=True):
+            if re.search(rf"\b{re.escape(c)}\b", tail, re.IGNORECASE):
+                return c
     return name(text, candidates)

@@ -14,7 +14,7 @@ export default function PrizePot({ pot, phase, round, maxRounds }) {
     <div className="prize-pot">
       <div className="pot-glow" />
       <div className="pot-amount">💰 {pot}</div>
-      <div className="pot-unit">MON</div>
+      <div className="pot-unit">pts</div>
       <div className="pot-phase">{PHASE_LABEL[phase] || phase}</div>
       {phase !== "idle" && phase !== "ended" && (
         <div className="pot-round">Round {round}/{maxRounds}</div>

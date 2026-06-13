@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from game import history, human, livestate, loop, serialize
+from game import history, human, livestate, loop, markets, serialize
 from game.roster import new_game
 
 
@@ -20,6 +20,13 @@ class SayIn(BaseModel):
 
 class VoteIn(BaseModel):
     target: str
+
+
+class BetIn(BaseModel):
+    marketId: int
+    option: str
+    address: str
+    amount: float = 5.0
 
 app = FastAPI(title="Pack — Agent Werewolf")
 app.add_middleware(
@@ -67,6 +74,7 @@ def start(kind: str = "betting"):
             _next_id = history.next_game_id()
         gid = _next_id
         _next_id += 1
+        markets.reset()  # fresh play-money pools/balances for the new game
         state = new_game(gid, kind=kind)
         threading.Thread(target=loop.run_game, args=(state,), daemon=True).start()
     return {"ok": True, "gameId": state.game_id, "kind": kind}
@@ -84,6 +92,23 @@ def control_vote(body: VoteIn):
     """Human player submits their vote target (unblocks the game loop)."""
     human.submit(body.target)
     return {"ok": True}
+
+
+@app.post("/bet")
+def place_bet(body: BetIn):
+    """Place a play-money bet on a live market (no chain, no wallet)."""
+    state = loop.STATE
+    if state is None:
+        return {"ok": False, "error": "no game in progress"}
+    return markets.place_bet(
+        state, body.marketId, body.option, body.address, body.amount
+    )
+
+
+@app.get("/wallet")
+def get_wallet(address: str):
+    """Current play-money balance for a bettor id (seeded on first sight)."""
+    return {"address": address, "balance": markets.balance(address)}
 
 
 @app.get("/state")

@@ -36,7 +36,7 @@ class GameState:
     phase: str = "setup"            # setup|night|morning|discussion|voting|resolution|ended
     round: int = 1
     max_rounds: int = 2
-    pot: str = "1.0"
+    pot: str = "100"
     speaking_idx: int | None = None
     players: list[Player] = field(default_factory=list)
     night_result: dict | None = None
@@ -45,10 +45,15 @@ class GameState:
     votes: list[dict] = field(default_factory=list)
     betting_open: bool = True
     markets: list[Market] = field(default_factory=list)
+    payouts: list[dict] = field(default_factory=list)
     winner: str | None = None
     # When set, the loop is blocked waiting for the human player's input.
     # e.g. {"kind": "speak", "playerIdx": 3} or {"kind": "vote", "playerIdx": 3, "options": [...]}
     awaiting: dict | None = None
+
+    # tags the current speaker's line as a special dramatic beat for the UI
+    # ("defense" | "last_words"), or None for ordinary discussion.
+    speech_kind: str | None = None
 
     # transient per-round scratch (never serialized to clients)
     seer_knowledge: dict | None = None

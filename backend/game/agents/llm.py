@@ -14,12 +14,15 @@ def _model(json_mode: bool):
         from langchain_openai import ChatOpenAI
 
         kwargs = {
-            "model": config.openai_model,
-            "api_key": config.openai_api_key,
+            "model": config.model,
+            "api_key": config.api_key,
             # Bound every request so a stalled call can never freeze the game.
             "timeout": 20,
             "max_retries": 1,
         }
+        # Groq (or any OpenAI-compatible endpoint) is selected purely via base_url.
+        if config.base_url:
+            kwargs["base_url"] = config.base_url
         if json_mode:
             kwargs["model_kwargs"] = {"response_format": {"type": "json_object"}}
         _models[json_mode] = ChatOpenAI(**kwargs)

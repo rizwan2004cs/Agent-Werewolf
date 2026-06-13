@@ -466,3 +466,52 @@ body { font-family: var(--font-body); font-size: 18px; image-rendering: pixelate
 }
 .you-result.win { background: var(--village); color: #04210c; }
 .you-result.lose { background: var(--wolf); color: #fff; }
+
+/* ---------------- backend status / cold-start wake ---------------- */
+.server-status {
+  font-family: var(--font-body); font-size: 16px; line-height: 1.3;
+  margin: 0 auto 22px; max-width: 460px; padding: 8px 12px;
+  border: 2px solid var(--px-border); box-shadow: 3px 3px 0 var(--px-border);
+}
+.server-status.up { background: #0d2a17; color: #b7f5cb; }
+.server-status.waking { background: #2a230d; color: #f7e6a8; animation: pulse 1.6s steps(2) infinite; }
+
+/* reuses .overlay; the wake card is centered and reassuring */
+.wake-card { align-items: center; max-width: 440px; }
+.wake-icon { font-size: 44px; animation: bob .8s steps(2) infinite alternate; }
+.wake-title { font-family: var(--font-pixel); font-size: 14px; color: var(--gold); margin: 12px 0 10px; text-shadow: 2px 2px 0 #000; }
+.wake-msg { font-size: 17px; line-height: 1.4; opacity: .92; margin-bottom: 12px; }
+.wake-secs { font-family: var(--font-pixel); font-size: 10px; color: var(--text); opacity: .7; margin-bottom: 10px; }
+.wake-bar { display: flex; gap: 7px; justify-content: center; margin: 6px 0 4px; }
+.wake-bar span {
+  width: 12px; height: 12px; background: var(--gold);
+  box-shadow: 2px 2px 0 var(--px-border);
+  animation: wakeblink 1s steps(2) infinite;
+}
+@keyframes wakeblink { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+.err-banner.reconnect {
+  background: #3a2a0a; color: #fde9b5; font-size: 16px;
+  animation: pulse 1.6s steps(2) infinite;
+}
+
+/* ---------------- drama beats: defense / last words ---------------- */
+.line-tag {
+  font-family: var(--font-pixel); font-size: 7px; margin-left: 8px;
+  padding: 2px 5px; border: 1px solid var(--px-border); vertical-align: middle;
+}
+.line-tag.defense { background: var(--gold); color: #2a1d00; }
+.line-tag.last { background: var(--wolf); color: #fff; }
+.chat-line.defense { border-left: 3px solid var(--gold); padding-left: 6px; }
+.chat-line.last_words { border-left: 3px solid var(--wolf); padding-left: 6px; }
+
+.dlg-banner {
+  font-family: var(--font-pixel); font-size: 9px; letter-spacing: .5px;
+  padding: 5px 8px; margin-bottom: 8px; display: inline-block;
+  border: 2px solid var(--px-border); box-shadow: 2px 2px 0 var(--px-border);
+}
+.dlg-banner.defense { background: var(--gold); color: #2a1d00; }
+.dlg-banner.last_words { background: var(--wolf); color: #fff; animation: pulse 1s steps(2) infinite; }
+/* tint the speech box for the dramatic beats */
+.dialogue-overlay.defense .dlg-box { box-shadow: inset 0 0 0 2px var(--gold); }
+.dialogue-overlay.last_words .dlg-box { box-shadow: inset 0 0 0 2px var(--wolf); }

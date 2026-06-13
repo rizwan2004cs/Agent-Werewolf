@@ -7,7 +7,7 @@
 #    state on wake/restart (history.json is also ephemeral on free disk).
 #  - For a live multi-audience demo, keep the backend warm or use a paid plan.
 services:
-  # ---- FastAPI backend: game loop + /state + /history + chain calls ----
+  # ---- FastAPI backend: game loop + /state + /history + play-money betting ----
   - type: web
     name: pack-backend
     runtime: python
@@ -16,20 +16,18 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: OPENAI_API_KEY        # secret — set in dashboard
+      # Pick ONE provider (both use the OpenAI-compatible API), or set neither
+      # to run in deterministic MOCK mode (offline, free).
+      - key: OPENAI_API_KEY        # secret — set in dashboard, or leave unset
         sync: false
       - key: OPENAI_MODEL
         value: gpt-4o-mini
-      - key: RPC_URL               # contract.dev stagenet RPC (has a token) — secret
+      - key: GROQ_API_KEY          # secret — Groq free tier (used if OPENAI_API_KEY is unset)
         sync: false
-      - key: CHAIN_ID
-        value: "143"
-      - key: CONTRACT_ADDRESS
-        value: "0x3e78581cB1e864489B1975f1896cA599efa04258"
-      - key: OPERATOR_KEY          # operator private key — secret, NEVER commit
-        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
       - key: PACE
-        value: "3"
+        value: "1.2"
 
   # ---- Vite/React frontend: served as a static site ----
   - type: web
@@ -41,14 +39,6 @@ services:
     envVars:
       - key: VITE_BACKEND_URL      # set to the deployed pack-backend URL
         sync: false
-      - key: VITE_CONTRACT_ADDRESS
-        value: "0x3e78581cB1e864489B1975f1896cA599efa04258"
-      - key: VITE_CHAIN_ID
-        value: "143"
-      - key: VITE_RPC_URL          # baked into the client bundle (public) — set in dashboard
-        sync: false
-      - key: VITE_EXPLORER_URL
-        value: ""
     routes:
       - type: rewrite
         source: /*

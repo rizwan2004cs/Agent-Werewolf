@@ -51,11 +51,43 @@ def speak(player, state, seer_knowledge=None):
     if config.use_mock:
         return mock.speak(player, state, seer_knowledge)
     try:
-        raw = llm.chat(prompts.day_speak(player, state, seer_knowledge), json_mode=True)
+        raw = llm.chat(
+            prompts.day_speak(player, state, seer_knowledge),
+            max_tokens=320,
+            json_mode=True,
+        )
         return parse.speak(raw)
     except Exception as e:
         print(f"[agents] speak LLM failed ({e}); mock fallback")
         return mock.speak(player, state, seer_knowledge)
+
+
+def defend(player, state, seer_knowledge=None):
+    """The accused pleads their case before the vote -> (speech, thought)."""
+    if config.use_mock:
+        return mock.defend(player, state)
+    try:
+        raw = llm.chat(
+            prompts.defend(player, state, seer_knowledge),
+            max_tokens=320,
+            json_mode=True,
+        )
+        return parse.speak(raw)
+    except Exception as e:
+        print(f"[agents] defend LLM failed ({e}); mock fallback")
+        return mock.defend(player, state)
+
+
+def last_words(player, state):
+    """A just-eliminated player's final line -> (speech, thought)."""
+    if config.use_mock:
+        return mock.last_words(player, state)
+    try:
+        raw = llm.chat(prompts.last_words(player, state), max_tokens=200, json_mode=True)
+        return parse.speak(raw)
+    except Exception as e:
+        print(f"[agents] last_words LLM failed ({e}); mock fallback")
+        return mock.last_words(player, state)
 
 
 def vote(player, state, seer_knowledge=None):

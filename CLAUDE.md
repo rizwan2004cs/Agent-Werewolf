@@ -1,68 +1,70 @@
-# CLAUDE.md — Pack (Agent Werewolf on Monad)
+# CLAUDE.md — Pack (Agent Werewolf)
 
-> Master context. Read this first, then `docs/Architectural decisions/` in numeric order (`00`–`06`).
-> That folder is the **authoritative spec**; where this file differs, the differences below are the
-> deliberate, user-approved decisions for this build and win.
+> Master context. The `docs/` folder holds the original architectural spec, which was written for an
+> on-chain (Monad) build. **That blockchain layer has been removed** — the notes below are the
+> authoritative description of how this repo actually works now. Where the docs mention Monad,
+> contracts, wallets, web3, or on-chain settlement, treat it as historical: it no longer applies.
 
 ## What we're building
 
-**Pack**: 7 AI agents play Werewolf (social deduction); humans bet on the outcome; Monad settles the
-money and records the votes. A spectator sport — agents are the players, humans are the audience and
-bettors, the chain is the neutral referee. This repo is the MVP: a full game in a polished village-scene
-UI with on-chain votes + betting.
+**Pack**: 7 AI agents play Werewolf (social deduction). Humans watch and bet **play money** on the
+outcome, or join the table as a hidden-role player. A spectator sport — agents are the players,
+humans are the audience and bettors. No blockchain, no wallet: everything runs off-chain in memory
+so it deploys to any free host (e.g. Render).
 
-Built for **Monad Blitz Bangalore V4 — "The Agent Economy"** (7 June). Judged 50% peer devs + 50% jury
-on an **innovation lens**; the **3-minute live demo** is the core.
+## Locked decisions
 
-## Locked decisions (override the docs' defaults)
-
-- **LLM:** OpenAI (`gpt-4o-mini`) via provider auto-detect in `backend/game/agents.py`
-  (Anthropic also supported; neither key → deterministic mock). Docs said Claude.
-- **Network:** contract.dev **stagenet, chainId 143** (RPC in root `.env`, funded ~11k MON).
-  Docs said public testnet 10143 — kept as a fallback (`monadTestnet` Hardhat network).
-  ⚠ Private RPC: public explorers can't see it; may need a public-testnet deploy for the demo's verify beat.
-- **On-chain scope:** votes **and** betting on-chain. Two operator-driven contracts (not the docs'
-  single betting-only contract): `AgentWerewolf.sol` (immutable roles/kills/votes/winner) +
-  `WerewolfArena.sol` (parimutuel betting). One funded operator key writes all chain state.
-- **Folders:** `contract/`, `backend/`, `frontend/` (renamed from contracts/orchestrator).
-- **Config:** a single **root `.env`** (gitignored), read by both backend (`game/__init__.py`) and
-  Hardhat (`hardhat.config.js`). `MOCK_CHAIN=1` + no LLM key → whole game runs offline.
+- **LLM:** provider auto-detect in `backend/game/config.py` (all OpenAI-compatible):
+  `OPENAI_API_KEY` → OpenAI (`gpt-4o-mini`), else `GROQ_API_KEY` → Groq
+  (`llama-3.3-70b-versatile`), else deterministic mock mode (offline, no cost).
+- **No chain.** All Monad/contract/web3/wallet code has been removed. Betting is a self-contained,
+  in-memory **parimutuel play-money simulation** in `backend/game/markets.py`.
+- **Play money:** each browser gets a random `bettor id` (localStorage) and starts with 100 points.
+  Bets are pooled per market/option; on resolve the pool is split among winners pro-rata and credited
+  back. State is in-memory and resets on a new game / backend restart.
+- **Folders:** `backend/`, `frontend/` (the old `contract/` and `shared/` dirs are gone).
+- **Config:** a single root `.env` (gitignored), read by the backend via `game/config.py`. Only LLM +
+  pacing settings remain (`OPENAI_API_KEY`, `OPENAI_MODEL`, `PACE`, `MAX_ROUNDS`).
 
 ## Tech stack
 
 | Layer | Tool |
 |-------|------|
-| Chain | Monad via contract.dev stagenet (chainId 143); EVM-equivalent |
-| Contracts | Solidity ^0.8.20, Hardhat (`contract/`) — operator-driven |
-| Backend | Python + FastAPI + OpenAI SDK + web3.py (`backend/`) |
-| Frontend | React + Vite + ethers v6 (`frontend/`); DiceBear avatars |
+| Backend | Python + FastAPI + (optional) OpenAI + LangGraph (`backend/`) |
+| Betting | In-memory parimutuel simulation (play money) — `backend/game/markets.py` |
+| Frontend | React + Vite (`frontend/`); DiceBear avatars |
 
 ## Repo structure
 
 ```
 pack/
 ├── CLAUDE.md
-├── docs/Architectural decisions/   # authoritative spec (00–06)
-├── contract/   contracts/{AgentWerewolf,WerewolfArena}.sol · scripts/ · test/ · hardhat.config.js
-├── backend/    game/{state,prompts,agents,chain,loop}.py · server.py · requirements.txt
-├── frontend/   src/{scene/, betting/, wallet.js, api.js, App.jsx, styles.css, abi.json}
-├── shared/abi/ # ABI source of truth (copied into backend/ + frontend/src/)
-└── .env        # single root config (gitignored)
+├── docs/                # original spec (historical — describes the removed on-chain build)
+├── backend/  game/{state,roster,agents,phases,markets,loop,...}.py · server.py · requirements.txt
+├── frontend/ src/{scene/, betting/, play/, api.js, App.jsx, styles.css}
+├── render.yaml          # Render Blueprint (backend web service + static frontend)
+└── .env                 # single root config (gitignored)
 ```
+
+## HTTP surface (backend)
+
+- `POST /control/start?kind=betting|human` — start a game.
+- `POST /control/say`, `POST /control/vote` — human-player inputs.
+- `GET  /state?mode=god|bettor|player` — fog-aware game state (includes `markets` + `payouts`).
+- `POST /bet` `{marketId, option, address, amount}` — place a play-money bet.
+- `GET  /wallet?address=...` — current play-money balance for a bettor id.
+- `GET  /history` — past completed games.
 
 ## Build principles
 
-1. **Backend first, runnable off-chain.** Full game to console before chain or UI.
+1. **Always runnable, fully offline.** No API key and no chain needed — `PACE=0` runs instantly.
 2. **The discussion is the show.** Believable agents are the core value — prioritize prompts.
-3. **Chain is minimal + resilient.** Operator-driven; every chain call wrapped in try/except so a
-   failed tx never crashes the game loop.
-4. **Always runnable.** Build per `docs/Architectural decisions/06-BUILD-ORDER.md`; never leave broken.
-5. **Frontend must feel like a game** — village ring, character speech clouds, day/night, pacing beats.
+3. **Betting never breaks the game.** It's a side ledger over GameState; a bad bet just returns an error.
+4. **Frontend must feel like a game** — village ring, speech clouds, day/night, pacing beats.
 
 ## Conventions
 
-- **7 players**: 2 wolves, 1 seer, 4 villagers. Names: Luna, Caspian, Mira, Theron, Dax, Vera, Orin.
-- Money: strings in JSON (avoid float drift); wei/MON on-chain.
+- **7 players**: 2 wolves, 1 seer, 4 villagers. Names drawn from `backend/game/characters.py`.
+- Money: play-money "points", tracked as floats in `markets.py`, serialized as strings to clients.
 - **Fog of war is server-side** — never send hidden roles/reasoning to a bettor-mode client.
 - **Max 2 rounds** per game (hard cap).
-- State/ABI/HTTP shapes are frozen in `02-INTERFACES.md` — build against them.
