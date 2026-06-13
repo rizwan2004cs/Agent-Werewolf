@@ -24,14 +24,17 @@ def _beat(seconds: float) -> None:
 
 
 def _hold_speech(text: str) -> None:
-    """Keep a spoken line on screen long enough for the UI typewriter (~30
-    chars/sec) to finish rendering it, plus a short reading beat — so each
-    agent finishes before the next one speaks. Skipped entirely at PACE=0
-    (instant console/test runs). Length-based, not scaled by PACE."""
+    """Keep a spoken line on screen long enough for the UI typewriter (~24
+    chars/sec) to finish rendering it, PLUS a generous reading beat — so
+    spectators can comfortably read each line before the next agent speaks.
+    Skipped entirely at PACE=0 (instant console/test runs). Length-based, with
+    a gentle extra nudge from PACE so it can be tuned further via the env var."""
     if config.pace <= 0:
         return
     n = len(text or "")
-    time.sleep(min(16.0, max(3.5, n / 22)))  # > n/30 typing time, with margin
+    # base: ~n/13 s of reading time (well above the n/24 typing time), clamped
+    base = min(22.0, max(5.5, n / 13))
+    time.sleep(base * (0.85 + 0.15 * config.pace))
 
 
 def _say_beat(state, nar, player, speech, thought, kind, event):

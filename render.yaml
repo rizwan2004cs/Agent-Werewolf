@@ -26,8 +26,10 @@ services:
         sync: false
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
+      - key: GROQ_FALLBACK_MODEL   # auto-used when the primary model hits its rate limit
+        value: llama-3.1-8b-instant
       - key: PACE
-        value: "1.2"
+        value: "1.5"
 
   # ---- Vite/React frontend: served as a static site ----
   - type: web

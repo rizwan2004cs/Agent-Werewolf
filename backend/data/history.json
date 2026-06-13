@@ -1,1 +1,674 @@
-[]
+[
+  {
+    "gameId": 1,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1781368057,
+    "players": [
+      {
+        "name": "Olivia Hart",
+        "role": "villager"
+      },
+      {
+        "name": "Noah Quinn",
+        "role": "seer"
+      },
+      {
+        "name": "Elena Voss",
+        "role": "villager"
+      },
+      {
+        "name": "Isabella Frost",
+        "role": "wolf"
+      },
+      {
+        "name": "Adrian Black",
+        "role": "wolf"
+      },
+      {
+        "name": "Sophia Vale",
+        "role": "villager"
+      },
+      {
+        "name": "Marcus Reed",
+        "role": "villager"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Olivia Hart",
+        "text": "We can't afford another wasted vote. Think it through.",
+        "ts": 1781367991
+      },
+      {
+        "round": 1,
+        "speaker": "Noah Quinn",
+        "text": "We can't afford another wasted vote. Think it through. Marcus Reed, you've been hard to read.",
+        "ts": 1781367995
+      },
+      {
+        "round": 1,
+        "speaker": "Isabella Frost",
+        "text": "I'll say it plainly: that explanation was too convenient.",
+        "ts": 1781367999
+      },
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "I've been watching the voting patterns and one of you stands out. Isabella Frost, you've been hard to read.",
+        "ts": 1781368003
+      },
+      {
+        "round": 1,
+        "speaker": "Sophia Vale",
+        "text": "I trusted that read earlier and now I'm second-guessing it.",
+        "ts": 1781368008
+      },
+      {
+        "round": 1,
+        "speaker": "Marcus Reed",
+        "text": "I trusted that read earlier and now I'm second-guessing it.",
+        "ts": 1781368012
+      },
+      {
+        "round": 1,
+        "speaker": "Olivia Hart",
+        "text": "We can't afford another wasted vote. Think it through.",
+        "ts": 1781368015
+      },
+      {
+        "round": 1,
+        "speaker": "Noah Quinn",
+        "text": "Let's not rush, but I do have a suspicion forming. Olivia Hart, you've been hard to read.",
+        "ts": 1781368019
+      },
+      {
+        "round": 1,
+        "speaker": "Isabella Frost",
+        "text": "Let's not rush, but I do have a suspicion forming. Sophia Vale, you've been hard to read.",
+        "ts": 1781368023
+      },
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "Whoever's quiet right now is exactly who I'd watch.",
+        "ts": 1781368027
+      },
+      {
+        "round": 1,
+        "speaker": "Sophia Vale",
+        "text": "Something about last night doesn't sit right with me. Olivia Hart, you've been hard to read.",
+        "ts": 1781368030
+      },
+      {
+        "round": 1,
+        "speaker": "Marcus Reed",
+        "text": "Something about last night doesn't sit right with me. Adrian Black, you've been hard to read.",
+        "ts": 1781368035
+      },
+      {
+        "round": 1,
+        "speaker": "Olivia Hart",
+        "text": "Lynch me and you'll see your mistake tomorrow, when another body turns up.",
+        "ts": 1781368039,
+        "kind": "defense"
+      },
+      {
+        "round": 1,
+        "speaker": "Olivia Hart",
+        "text": "You just killed an innocent. The wolves are still sitting right beside you.",
+        "ts": 1781368047,
+        "kind": "last_words"
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Olivia Hart",
+        "target": "Sophia Vale"
+      },
+      {
+        "voter": "Noah Quinn",
+        "target": "Adrian Black"
+      },
+      {
+        "voter": "Isabella Frost",
+        "target": "Olivia Hart"
+      },
+      {
+        "voter": "Adrian Black",
+        "target": "Olivia Hart"
+      },
+      {
+        "voter": "Sophia Vale",
+        "target": "Noah Quinn"
+      },
+      {
+        "voter": "Marcus Reed",
+        "target": "Isabella Frost"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 0,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0.00",
+          "village": "0.00"
+        }
+      },
+      {
+        "marketId": 1,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Olivia Hart",
+          "Noah Quinn",
+          "Isabella Frost",
+          "Adrian Black",
+          "Sophia Vale",
+          "Marcus Reed"
+        ],
+        "winningOption": "Olivia Hart",
+        "pools": {
+          "Olivia Hart": "0.00",
+          "Noah Quinn": "0.00",
+          "Isabella Frost": "0.00",
+          "Adrian Black": "0.00",
+          "Sophia Vale": "0.00",
+          "Marcus Reed": "0.00"
+        }
+      },
+      {
+        "marketId": 2,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Isabella Frost",
+          "Adrian Black",
+          "Sophia Vale",
+          "Marcus Reed"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Isabella Frost": "0.00",
+          "Adrian Black": "0.00",
+          "Sophia Vale": "0.00",
+          "Marcus Reed": "0.00"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 2,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1781368247,
+    "players": [
+      {
+        "name": "Adrian Black",
+        "role": "villager"
+      },
+      {
+        "name": "Victor Kane",
+        "role": "seer"
+      },
+      {
+        "name": "Selene Ward",
+        "role": "wolf"
+      },
+      {
+        "name": "Maya Sterling",
+        "role": "wolf"
+      },
+      {
+        "name": "Jaxon Pierce",
+        "role": "villager"
+      },
+      {
+        "name": "Elena Voss",
+        "role": "villager"
+      },
+      {
+        "name": "Damien Cross",
+        "role": "villager"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "The math points one direction and I don't like where it lands.",
+        "ts": 1781368102
+      },
+      {
+        "round": 1,
+        "speaker": "Selene Ward",
+        "text": "Whoever's quiet right now is exactly who I'd watch.",
+        "ts": 1781368106
+      },
+      {
+        "round": 1,
+        "speaker": "Maya Sterling",
+        "text": "I've been watching the voting patterns and one of you stands out. Damien Cross, you've been hard to read.",
+        "ts": 1781368110
+      },
+      {
+        "round": 1,
+        "speaker": "Jaxon Pierce",
+        "text": "I trusted that read earlier and now I'm second-guessing it.",
+        "ts": 1781368114
+      },
+      {
+        "round": 1,
+        "speaker": "Elena Voss",
+        "text": "I'll say it plainly: that explanation was too convenient.",
+        "ts": 1781368118
+      },
+      {
+        "round": 1,
+        "speaker": "Damien Cross",
+        "text": "The math points one direction and I don't like where it lands.",
+        "ts": 1781368121
+      },
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "I'll say it plainly: that explanation was too convenient.",
+        "ts": 1781368125
+      },
+      {
+        "round": 1,
+        "speaker": "Selene Ward",
+        "text": "I trusted that read earlier and now I'm second-guessing it. Adrian Black, you've been hard to read.",
+        "ts": 1781368129
+      },
+      {
+        "round": 1,
+        "speaker": "Maya Sterling",
+        "text": "I trusted that read earlier and now I'm second-guessing it. Damien Cross, you've been hard to read.",
+        "ts": 1781368133
+      },
+      {
+        "round": 1,
+        "speaker": "Jaxon Pierce",
+        "text": "The math points one direction and I don't like where it lands. Maya Sterling, you've been hard to read.",
+        "ts": 1781368138
+      },
+      {
+        "round": 1,
+        "speaker": "Elena Voss",
+        "text": "Something about last night doesn't sit right with me. Adrian Black, you've been hard to read.",
+        "ts": 1781368143
+      },
+      {
+        "round": 1,
+        "speaker": "Damien Cross",
+        "text": "Something about last night doesn't sit right with me. Elena Voss, you've been hard to read.",
+        "ts": 1781368147
+      },
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "I've been straight with you from the start. Jaxon Pierce is the one twisting every word.",
+        "ts": 1781368151,
+        "kind": "defense"
+      },
+      {
+        "round": 1,
+        "speaker": "Maya Sterling",
+        "text": "Clever. Too bad it won't save the rest of you.",
+        "ts": 1781368159,
+        "kind": "last_words"
+      },
+      {
+        "round": 2,
+        "speaker": "Adrian Black",
+        "text": "Whoever's quiet right now is exactly who I'd watch. Jaxon Pierce, you've been hard to read.",
+        "ts": 1781368204
+      },
+      {
+        "round": 2,
+        "speaker": "Selene Ward",
+        "text": "The math points one direction and I don't like where it lands. Jaxon Pierce, you've been hard to read.",
+        "ts": 1781368208
+      },
+      {
+        "round": 2,
+        "speaker": "Jaxon Pierce",
+        "text": "Whoever's quiet right now is exactly who I'd watch.",
+        "ts": 1781368214
+      },
+      {
+        "round": 2,
+        "speaker": "Damien Cross",
+        "text": "I trusted that read earlier and now I'm second-guessing it.",
+        "ts": 1781368217
+      },
+      {
+        "round": 2,
+        "speaker": "Adrian Black",
+        "text": "Something about last night doesn't sit right with me.",
+        "ts": 1781368221
+      },
+      {
+        "round": 2,
+        "speaker": "Selene Ward",
+        "text": "We can't afford another wasted vote. Think it through.",
+        "ts": 1781368224
+      },
+      {
+        "round": 2,
+        "speaker": "Jaxon Pierce",
+        "text": "Whoever's quiet right now is exactly who I'd watch.",
+        "ts": 1781368228
+      },
+      {
+        "round": 2,
+        "speaker": "Damien Cross",
+        "text": "The math points one direction and I don't like where it lands. Adrian Black, you've been hard to read.",
+        "ts": 1781368231
+      },
+      {
+        "round": 2,
+        "speaker": "Jaxon Pierce",
+        "text": "I've been straight with you from the start. Selene Ward is the one twisting every word.",
+        "ts": 1781368236,
+        "kind": "defense"
+      },
+      {
+        "round": 2,
+        "speaker": "Jaxon Pierce",
+        "text": "You just killed an innocent. The wolves are still sitting right beside you.",
+        "ts": 1781368243,
+        "kind": "last_words"
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Adrian Black",
+        "target": "Jaxon Pierce"
+      },
+      {
+        "voter": "Selene Ward",
+        "target": "Jaxon Pierce"
+      },
+      {
+        "voter": "Jaxon Pierce",
+        "target": "Selene Ward"
+      },
+      {
+        "voter": "Damien Cross",
+        "target": "Selene Ward"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 0,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0.00",
+          "village": "0.00"
+        }
+      },
+      {
+        "marketId": 1,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Adrian Black",
+          "Selene Ward",
+          "Maya Sterling",
+          "Jaxon Pierce",
+          "Elena Voss",
+          "Damien Cross"
+        ],
+        "winningOption": "Maya Sterling",
+        "pools": {
+          "Adrian Black": "0.00",
+          "Selene Ward": "0.00",
+          "Maya Sterling": "0.00",
+          "Jaxon Pierce": "0.00",
+          "Elena Voss": "0.00",
+          "Damien Cross": "0.00"
+        }
+      },
+      {
+        "marketId": 2,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Adrian Black",
+          "Selene Ward",
+          "Jaxon Pierce",
+          "Damien Cross"
+        ],
+        "winningOption": "Jaxon Pierce",
+        "pools": {
+          "Adrian Black": "0.00",
+          "Selene Ward": "0.00",
+          "Jaxon Pierce": "0.00",
+          "Damien Cross": "0.00"
+        }
+      }
+    ]
+  },
+  {
+    "gameId": 3,
+    "winner": "wolves",
+    "rounds": 2,
+    "endedAt": 1781368580,
+    "players": [
+      {
+        "name": "Adrian Black",
+        "role": "villager"
+      },
+      {
+        "name": "Sophia Vale",
+        "role": "villager"
+      },
+      {
+        "name": "Elena Voss",
+        "role": "wolf"
+      },
+      {
+        "name": "Maya Sterling",
+        "role": "villager"
+      },
+      {
+        "name": "Selene Ward",
+        "role": "villager"
+      },
+      {
+        "name": "Victor Kane",
+        "role": "seer"
+      },
+      {
+        "name": "Marcus Reed",
+        "role": "wolf"
+      }
+    ],
+    "discussionLog": [
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "Something about last night doesn't sit right with me.",
+        "ts": 1781368481
+      },
+      {
+        "round": 1,
+        "speaker": "Elena Voss",
+        "text": "Something about last night doesn't sit right with me.",
+        "ts": 1781368486
+      },
+      {
+        "round": 1,
+        "speaker": "Maya Sterling",
+        "text": "Something about last night doesn't sit right with me.",
+        "ts": 1781368492
+      },
+      {
+        "round": 1,
+        "speaker": "Selene Ward",
+        "text": "We can't afford another wasted vote. Think it through.",
+        "ts": 1781368498
+      },
+      {
+        "round": 1,
+        "speaker": "Victor Kane",
+        "text": "Whoever's quiet right now is exactly who I'd watch.",
+        "ts": 1781368504
+      },
+      {
+        "round": 1,
+        "speaker": "Marcus Reed",
+        "text": "Let's not rush, but I do have a suspicion forming.",
+        "ts": 1781368510
+      },
+      {
+        "round": 1,
+        "speaker": "Adrian Black",
+        "text": "I'll say it plainly: that explanation was too convenient. Maya Sterling, you've been hard to read.",
+        "ts": 1781368515
+      },
+      {
+        "round": 1,
+        "speaker": "Elena Voss",
+        "text": "I've been watching the voting patterns and one of you stands out.",
+        "ts": 1781368523
+      },
+      {
+        "round": 1,
+        "speaker": "Maya Sterling",
+        "text": "I've been watching the voting patterns and one of you stands out. Adrian Black, you've been hard to read.",
+        "ts": 1781368529
+      },
+      {
+        "round": 1,
+        "speaker": "Selene Ward",
+        "text": "Whoever's quiet right now is exactly who I'd watch.",
+        "ts": 1781368537
+      },
+      {
+        "round": 1,
+        "speaker": "Victor Kane",
+        "text": "I've been watching the voting patterns and one of you stands out.",
+        "ts": 1781368543
+      },
+      {
+        "round": 1,
+        "speaker": "Marcus Reed",
+        "text": "The math points one direction and I don't like where it lands. Maya Sterling, you've been hard to read.",
+        "ts": 1781368549
+      },
+      {
+        "round": 1,
+        "speaker": "Maya Sterling",
+        "text": "Lynch me and you'll see your mistake tomorrow, when another body turns up.",
+        "ts": 1781368557,
+        "kind": "defense"
+      },
+      {
+        "round": 1,
+        "speaker": "Selene Ward",
+        "text": "Wrong call. Remember my face when the next of you falls.",
+        "ts": 1781368567,
+        "kind": "last_words"
+      }
+    ],
+    "votes": [
+      {
+        "voter": "Adrian Black",
+        "target": "Elena Voss"
+      },
+      {
+        "voter": "Elena Voss",
+        "target": "Selene Ward"
+      },
+      {
+        "voter": "Maya Sterling",
+        "target": "Marcus Reed"
+      },
+      {
+        "voter": "Selene Ward",
+        "target": "Maya Sterling"
+      },
+      {
+        "voter": "Victor Kane",
+        "target": "Marcus Reed"
+      },
+      {
+        "voter": "Marcus Reed",
+        "target": "Selene Ward"
+      }
+    ],
+    "markets": [
+      {
+        "marketId": 0,
+        "type": "game_winner",
+        "round": 1,
+        "options": [
+          "wolves",
+          "village"
+        ],
+        "winningOption": "wolves",
+        "pools": {
+          "wolves": "0.00",
+          "village": "0.00"
+        }
+      },
+      {
+        "marketId": 1,
+        "type": "who_voted_out",
+        "round": 1,
+        "options": [
+          "Adrian Black",
+          "Elena Voss",
+          "Maya Sterling",
+          "Selene Ward",
+          "Victor Kane",
+          "Marcus Reed"
+        ],
+        "winningOption": "Selene Ward",
+        "pools": {
+          "Adrian Black": "0.00",
+          "Elena Voss": "0.00",
+          "Maya Sterling": "0.00",
+          "Selene Ward": "0.00",
+          "Victor Kane": "0.00",
+          "Marcus Reed": "0.00"
+        }
+      },
+      {
+        "marketId": 2,
+        "type": "who_voted_out",
+        "round": 2,
+        "options": [
+          "Adrian Black",
+          "Elena Voss",
+          "Victor Kane",
+          "Marcus Reed"
+        ],
+        "winningOption": null,
+        "pools": {
+          "Adrian Black": "0.00",
+          "Elena Voss": "0.00",
+          "Victor Kane": "0.00",
+          "Marcus Reed": "0.00"
+        }
+      }
+    ]
+  }
+]

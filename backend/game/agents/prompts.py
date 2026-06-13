@@ -15,7 +15,7 @@ def _roster(state):
     return alive, dead
 
 
-def _log(state, n=24):
+def _log(state, n=16):
     entries = state.discussion_log[-n:]
     if not entries:
         return "(no one has spoken yet — you may be opening the discussion)"

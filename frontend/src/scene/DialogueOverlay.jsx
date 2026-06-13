@@ -18,9 +18,10 @@ function latestThought(reasoning, name) {
   return null;
 }
 
-// Typewriter: reveal the line progressively (~30 chars/sec) instead of all at
-// once. The backend holds each line ~0.05s/char, so typing finishes in time.
-function useTypewriter(text, cps = 30) {
+// Typewriter: reveal the line progressively (~24 chars/sec) instead of all at
+// once — a calm, readable pace. The backend holds each line longer than the
+// typing time, so the full line stays up for a comfortable reading beat.
+function useTypewriter(text, cps = 24) {
   const [n, setN] = useState(0);
   useEffect(() => {
     setN(0);

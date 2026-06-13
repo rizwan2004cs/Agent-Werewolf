@@ -53,7 +53,7 @@ def speak(player, state, seer_knowledge=None):
     try:
         raw = llm.chat(
             prompts.day_speak(player, state, seer_knowledge),
-            max_tokens=320,
+            max_tokens=220,
             json_mode=True,
         )
         return parse.speak(raw)
@@ -69,7 +69,7 @@ def defend(player, state, seer_knowledge=None):
     try:
         raw = llm.chat(
             prompts.defend(player, state, seer_knowledge),
-            max_tokens=320,
+            max_tokens=200,
             json_mode=True,
         )
         return parse.speak(raw)

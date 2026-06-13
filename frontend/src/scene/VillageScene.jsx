@@ -2,6 +2,32 @@ import { useEffect, useState } from "react";
 import Character from "./Character";
 import PrizePot from "./PrizePot";
 
+// Pure-CSS pixel-art atmosphere layered behind the village ring. Decorative
+// only (pointer-events: none) and painted under the characters/pot.
+function SceneBackdrop() {
+  return (
+    <div className="scene-bg" aria-hidden="true">
+      <div className="sky" />
+      <div className="celestial" />
+      <div className="stars" />
+      <div className="clouds" />
+      <div className="treeline">
+        {Array.from({ length: 22 }).map((_, i) => (
+          <i className="pine" key={i} style={{ "--i": i }} />
+        ))}
+      </div>
+      <div className="huts">
+        <i className="hut" /><i className="hut tall" /><i className="hut" />
+      </div>
+      <div className="ground-glow" />
+      {Array.from({ length: 12 }).map((_, i) => (
+        <i className="firefly" key={i} style={{ "--i": i }} />
+      ))}
+      <div className="vignette" />
+    </div>
+  );
+}
+
 // Fit the ring inside the ACTUAL stage box (measured live with a
 // ResizeObserver), so characters never slide under the top bar, sidebar or
 // betting bar. Margins reserve space for the avatar + name chip + role tag.
@@ -42,6 +68,7 @@ export default function VillageScene({ state, godMode }) {
   if (!state || state.phase === "idle" || !state.players?.length) {
     return (
       <div className="scene empty" ref={sceneRef}>
+        <SceneBackdrop />
         <PrizePot pot={state?.pot ?? "—"} phase="idle" />
         <div className="empty-hint">Press ▶ Start to gather the village</div>
       </div>
@@ -50,6 +77,7 @@ export default function VillageScene({ state, godMode }) {
   const total = state.players.length;
   return (
     <div className="scene" ref={sceneRef}>
+      <SceneBackdrop />
       <PrizePot
         pot={state.pot}
         phase={state.phase}

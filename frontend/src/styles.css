@@ -515,3 +515,120 @@ body { font-family: var(--font-body); font-size: 18px; image-rendering: pixelate
 /* tint the speech box for the dramatic beats */
 .dialogue-overlay.defense .dlg-box { box-shadow: inset 0 0 0 2px var(--gold); }
 .dialogue-overlay.last_words .dlg-box { box-shadow: inset 0 0 0 2px var(--wolf); }
+
+/* ================= scene atmosphere (pixel-art depth) ================= */
+.scene-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+
+/* horizon haze that blends the sky band into the woodline */
+.sky { position: absolute; left: 0; right: 0; top: 0; height: 46%; }
+.app.day .sky  { background: linear-gradient(180deg, rgba(150,205,255,.16) 0%, rgba(245,235,180,.10) 70%, transparent 100%); }
+.app.night .sky{ background: linear-gradient(180deg, rgba(20,28,60,.45) 0%, rgba(30,40,80,.18) 70%, transparent 100%); }
+
+/* sun / moon — a chunky pixel disc (octagon) with a soft halo */
+.celestial {
+  position: absolute; right: 9%; top: 7%; width: 58px; height: 58px;
+  clip-path: polygon(33% 0,67% 0,100% 33%,100% 67%,67% 100%,33% 100%,0 67%,0 33%);
+  image-rendering: pixelated;
+}
+.app.day .celestial {
+  background: radial-gradient(circle at 50% 50%, #fff6c2 0 38%, #ffd23f 39% 72%, #f3a51f 73% 100%);
+  box-shadow: 0 0 34px 12px rgba(255,205,70,.40);
+}
+.app.night .celestial {
+  background: radial-gradient(circle at 62% 40%, #f2f5ff 0 58%, #c3d0f7 59% 100%);
+  box-shadow: 0 0 30px 10px rgba(180,200,255,.32);
+}
+
+/* starfield — night only, twinkling */
+.stars { position: absolute; left: 0; right: 0; top: 0; height: 42%; opacity: 0; }
+.app.night .stars {
+  opacity: 1; animation: twinkle 3.5s steps(2) infinite;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 22%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 17% 12%, #dfe7ff, transparent),
+    radial-gradient(1px 1px at 27% 28%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 39% 9%, #fff, transparent),
+    radial-gradient(1px 1px at 48% 24%, #cdd6ff, transparent),
+    radial-gradient(1.5px 1.5px at 58% 14%, #fff, transparent),
+    radial-gradient(1px 1px at 68% 30%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 76% 10%, #e6ecff, transparent),
+    radial-gradient(1px 1px at 85% 26%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 93% 16%, #fff, transparent),
+    radial-gradient(1px 1px at 33% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 63% 22%, #fff, transparent);
+}
+@keyframes twinkle { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+/* drifting blocky clouds (day) / faint wisps (night) */
+.clouds { position: absolute; top: 7%; left: 0; width: 100%; height: 30%; opacity: .9; }
+.clouds::before, .clouds::after {
+  content: ""; position: absolute; top: 12px; width: 18px; height: 18px;
+  background: #f4f7ff;
+  box-shadow:
+    18px 0 #f4f7ff, 36px 0 #f4f7ff, 18px -16px #f4f7ff, 36px -16px #eef2ff,
+    54px 0 #eef2ff, 0 0 0 0 #f4f7ff;
+  animation: drift 70s linear infinite;
+}
+.clouds::after { top: 70px; transform: scale(.7); animation-duration: 110s; animation-delay: -30s; opacity: .8; }
+.app.night .clouds { opacity: .35; }
+.app.night .clouds::before, .app.night .clouds::after { background: #38406b; box-shadow: 18px 0 #38406b, 36px 0 #38406b, 18px -16px #38406b, 36px -16px #2f3760, 54px 0 #2f3760; }
+@keyframes drift { from { left: -80px; } to { left: 100%; } }
+
+/* distant pine treeline standing on the woodline */
+.treeline {
+  position: absolute; left: 0; right: 0; top: 33%; height: 86px;
+  display: flex; align-items: flex-end; justify-content: space-between; padding: 0 6px;
+}
+.pine {
+  width: 0; height: 0; flex: 0 0 auto;
+  border-left: 13px solid transparent; border-right: 13px solid transparent;
+  border-bottom: 30px solid #123a20;
+  filter: drop-shadow(2px 0 0 rgba(0,0,0,.25));
+}
+.pine:nth-child(odd)   { border-bottom-width: 40px; border-left-width: 15px; border-right-width: 15px; border-bottom-color: #0f3019; }
+.pine:nth-child(3n)    { border-bottom-width: 46px; border-left-width: 16px; border-right-width: 16px; border-bottom-color: #154326; }
+.pine:nth-child(4n)    { border-bottom-width: 26px; border-bottom-color: #0d2816; }
+.app.night .pine        { border-bottom-color: #08200f; }
+.app.night .pine:nth-child(3n) { border-bottom-color: #0a2916; }
+
+/* a couple of pixel huts nestled at the treeline for village feel */
+.huts { position: absolute; left: 0; right: 0; top: 30%; height: 90px; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 12%; }
+.hut { position: relative; width: 34px; height: 24px; background: #5b3b22; border: 2px solid var(--px-border); box-shadow: inset -3px -3px 0 rgba(0,0,0,.25); }
+.hut.tall { width: 30px; height: 32px; background: #6b4226; }
+.hut::before { content: ""; position: absolute; left: -6px; top: -16px; width: 0; height: 0; border-left: 23px solid transparent; border-right: 23px solid transparent; border-bottom: 16px solid #7a2d1a; }
+.hut::after  { content: ""; position: absolute; right: 4px; bottom: 0; width: 8px; height: 12px; background: var(--px-border); }
+.app.night .hut::after { background: #ffcf5a; box-shadow: 0 0 8px 2px rgba(255,200,80,.7); }  /* lit window at night */
+
+/* warm gathering glow on the ground where the ring stands */
+.ground-glow { position: absolute; left: 50%; top: 56%; transform: translate(-50%,-50%); width: 64%; height: 42%; }
+.app.day .ground-glow   { background: radial-gradient(ellipse at center, rgba(255,200,90,.16), transparent 70%); }
+.app.night .ground-glow { background: radial-gradient(ellipse at center, rgba(120,150,255,.16), transparent 72%); }
+
+/* fireflies at night / faint dust motes by day */
+.firefly {
+  position: absolute; width: 4px; height: 4px;
+  left: calc(7% + var(--i) * 7.6%); top: calc(40% + (var(--i) * 4%) - 20%);
+  background: #ffe27a; box-shadow: 0 0 7px 2px rgba(255,226,122,.85);
+  opacity: 0; animation: floaty 6s ease-in-out infinite, twk 1.6s steps(2) infinite;
+  animation-delay: calc(var(--i) * -0.6s), calc(var(--i) * -0.3s);
+}
+.app.night .firefly { opacity: 1; }
+.app.day .firefly { background: rgba(255,255,255,.7); box-shadow: none; opacity: .3; }
+@keyframes floaty { 0%,100% { transform: translate(0,0); } 25% { transform: translate(8px,-12px); } 50% { transform: translate(-6px,-22px); } 75% { transform: translate(6px,-10px); } }
+@keyframes twk { 0%,100% { filter: brightness(1); } 50% { filter: brightness(.4); } }
+
+/* edge vignette to focus the eye on the gathering */
+.vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, transparent 52%, rgba(0,0,0,.42) 100%); }
+
+/* characters now stand on the ground (cast shadow) + the speaker is spotlit */
+.character::after {
+  content: ""; position: absolute; left: 50%; top: 80px; transform: translateX(-50%);
+  width: 66px; height: 13px; background: rgba(0,0,0,.42); border-radius: 50%;
+  filter: blur(1px); z-index: -1;
+}
+.character.dead::after { opacity: .3; }
+.character.speaking::before {
+  content: ""; position: absolute; left: 50%; top: 42px; transform: translate(-50%,-50%);
+  width: 150px; height: 150px; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,210,63,.30), transparent 65%);
+}
